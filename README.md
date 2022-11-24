@@ -2,7 +2,7 @@
 coop-go 앱 개발 repository
 
 ## 사용 기술
-<img src="https://img.shields.io/badge/React Native-green?style=for-the-badge&logo=React&logoColor=black"/></a>
+<img src="https://img.shields.io/badge/Android-green?style=for-the-badge&logo=React&logoColor=black"/></a>
 <img src="https://img.shields.io/badge/Flutter-blue?style=for-the-badge&logo=Flutter&logoColor=black"/></a>
 
 ## 소개
