@@ -1,5 +1,4 @@
 # Coop-Go App Front
-coop-go 앱 프론트엔드 개발 </br>
 <a href= "https://soobang-dev.tistory.com/"><img src="https://img.shields.io/badge/Tistory-white?style=for-the-badge&logo=Tistory&logoColor=black"/></a>
 
 ## 개발 
@@ -8,12 +7,25 @@ coop-go 앱 프론트엔드 개발 </br>
 <img src="https://img.shields.io/badge/Dart-navy?style=for-the-badge&logo=Dart&logoColor=white"/></a>
 
 ## 화면 소개
+home: 홈 화면 기본틀 + 좌측 네비게이션 바 </br>
+<h4> pages </h4>
+mainPage: 메인화면, QR 생성 </br>
+myPage: 마이페이지, 영수증 모아보기 </br>
+settingsPage: 세팅페이지, 환경설정 </br>
+<h4> bill </h4>
+bill: 개별 </br>
+refundRequest: 환불 요청 </br>
 
-
-
-
-
-## 팀원
+## made by
 방현수
+
+## Reference
+[Flutter Documentation]
+   [https://flutter-ko.dev/docs/development/ui/widgets]
+    
+[참고 사이트]
+   [https://dev-yakuza.posstree.com/ko/flutter/]
+
+
 
 
