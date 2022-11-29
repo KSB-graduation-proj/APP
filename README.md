@@ -9,7 +9,7 @@ coop-go 앱 개발 repository
 <img src="https://img.shields.io/badge/Firebase-yellow?style=for-the-badge&logo=Firebase&logoColor=black"/></a>
 
 ## 소개
-COOP-GO
+<h2> COOP-GO </h2>
 : Amazon-Go를 벤치마킹한 실시간 영상 객체인식을 통한 매점 자동결제 서비스
 Just GRAP, SCAN, and GO!
 사용자는 물건을 집어 계산대에 올려둔 후, QR을 스캔하고, 그냥 매점 밖으로 나가면 된다.
