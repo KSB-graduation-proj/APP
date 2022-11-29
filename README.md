@@ -34,7 +34,8 @@ QR 인식으로 사용자 관리
 문의 검토
 
 ## Prototype
-<img src= https://user-images.githubusercontent.com/90560533/204531213-05b78ce9-c3fc-416c-aaab-13942cb8cb83.png width="60%" height="60%>
+<img src = https://user-images.githubusercontent.com/90560533/204531213-05b78ce9-c3fc-416c-aaab-13942cb8cb83.png width="60%" height="60%">
+
 
 ## 팀원
 Coop-go app 개발 팀원
