@@ -1,5 +1,6 @@
 # Coop-Go App Front
 <a href= "https://soobang-dev.tistory.com/"><img src="https://img.shields.io/badge/Tistory-white?style=for-the-badge&logo=Tistory&logoColor=black"/></a>
+<h6> * window android studio 이용해 개발 중이라 AVD "Pixel 3 XL API 30" 크기 사용하시길 *</h6>
 
 ## 개발 
 <img src="https://img.shields.io/badge/Android-green?style=for-the-badge&logo=Android&logoColor=black"/></a>
