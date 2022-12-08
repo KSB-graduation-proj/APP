@@ -1,5 +1,7 @@
 # Coop-Go APP
 coop-go 앱 개발 repository
+</br>
+"front" brunch에서 현재 진행상황 확인 가능
 
 ## 개발 
 <img src="https://img.shields.io/badge/Android-green?style=for-the-badge&logo=Android&logoColor=black"/></a>
