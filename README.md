@@ -1,7 +1,7 @@
 # Coop-Go APP
 coop-go 앱 개발 repository
 </br>
-"front" brunch에서 현재 진행상황 확인 가능
+"front" brunch에서 현재 진행상황 확인 가능 : https://github.com/KSB-graduation-proj/APP/blob/front/
 
 <h3>시연영상</h3>
 coop-go 시연영상 유튜브 링크 : https://www.youtube.com/watch?v=ExPrby0-4T8
