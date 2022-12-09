@@ -34,9 +34,9 @@ https://github.com/KSB-graduation-proj/APP : 어플 </br>
 https://github.com/KSB-graduation-proj/AI : 객체인식 모델
 
 <h3> 팀원 기술블로그 </h3>
-https://soobang-dev.tistory.com/category/졸업프로젝트/앱</br> : 방현수
-https://grdnr13.tistory.com/category/졸업 프로젝트</br> : 김정원
-https://dontvisit.tistory.com/49</br> : 서동은
+https://soobang-dev.tistory.com/category/졸업프로젝트/앱 : 방현수 </br>
+https://grdnr13.tistory.com/category/졸업%20프로젝트: 김정원 </br> 
+https://dontvisit.tistory.com/49 : 서동은 </br>
 
 
 <h3> Coop-go Application </h3>
