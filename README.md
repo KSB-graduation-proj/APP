@@ -3,6 +3,10 @@ coop-go 앱 개발 repository
 </br>
 "front" brunch에서 현재 진행상황 확인 가능
 
+<h3>시연영상</h3>
+coop-go 시연영상 유튜브 링크 : https://www.youtube.com/watch?v=ExPrby0-4T8
+</br>
+
 ## 개발 
 <img src="https://img.shields.io/badge/Android-green?style=for-the-badge&logo=Android&logoColor=black"/></a>
 <img src="https://img.shields.io/badge/Ios-pink?style=for-the-badge&logo=Ios&logoColor=black"/></a>
@@ -21,6 +25,19 @@ Just GRAP, SCAN, and GO!
 </br>
 사용자는 물건을 집어 계산대에 올려둔 후, QR을 스캔하고, 그냥 매점 밖으로 나가면 된다.
 결제는 미리 등록해둔 결제 수단으로 진행되며 결제 영수증은 결제 이후 10분 이내로 발급된다.
+
+<h3> COOP-GO organization </h3>
+https://github.com/KSB-graduation-proj
+
+<h3> 프로젝트 레포지토리 정리 </h3>
+https://github.com/KSB-graduation-proj/APP : 어플 </br>
+https://github.com/KSB-graduation-proj/AI : 객체인식 모델
+
+<h3> 팀원 기술블로그 </h3>
+https://soobang-dev.tistory.com/category/졸업프로젝트/앱</br> : 방현수
+https://grdnr13.tistory.com/category/졸업 프로젝트</br> : 김정원
+https://dontvisit.tistory.com/49</br> : 서동은
+
 
 <h3> Coop-go Application </h3>
 : QR스캔 및 영수증 발급을 위한 애플리케이션
