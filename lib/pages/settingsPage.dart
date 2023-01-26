@@ -1,4 +1,8 @@
+import 'package:app_test/Setting/refundInfo.dart';
 import 'package:flutter/material.dart';
+import 'package:app_test/Setting/profile.dart';
+import 'package:app_test/Setting/pay.dart';
+import 'package:app_test/Setting/QnA.dart';
 
 enum Menu { itemOne, itemTwo, itemThree, itemFour }
 
@@ -27,7 +31,10 @@ class settingsPage extends StatelessWidget {
            )),
                   subtitle: Text('나의 회원 정보 보기'),
                   onTap: () {
-                    //Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context)=>profilePage())
+                    );
                   },
                 ),
                 Container(width: 500,
@@ -42,7 +49,10 @@ class settingsPage extends StatelessWidget {
                   )),
                   subtitle: Text('결제수단 등록/제거 '),
                   onTap: () {
-                    //Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context)=>payPage())
+                    );
                   },
                 ),
                 Container(width: 500,
@@ -57,7 +67,10 @@ class settingsPage extends StatelessWidget {
                   )),
                   subtitle: Text('1:1/환불 문의 '),
                   onTap: () {
-                    //Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context)=>qnaPage())
+                    );
                   },
                 ),
                 Container(width: 500,
@@ -72,7 +85,10 @@ class settingsPage extends StatelessWidget {
                   )),
                   subtitle: Text('나의 환불 영수증'),
                   onTap: () {
-                    // Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context)=>refundInfo())
+                    );
                   },
                 ),
                 Container(width: 500,
