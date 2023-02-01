@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:app_test/pages/mainPage.dart';
 import 'package:app_test/pages/myPage.dart';
 import 'package:app_test/pages/settingsPage.dart';
+import 'package:app_test/Setting/profile.dart';
+import 'package:app_test/Setting/QnA.dart';
+
+
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
@@ -73,13 +77,19 @@ class _Home extends State<Home> {
               ListTile(
                 title: Text('Profile'),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context)=>profilePage())
+                  );
                 },
               ),
               ListTile(
                 title: Text('1:1 문의'),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context)=>qnaPage())
+                  );
                 },
               ),
               ListTile(

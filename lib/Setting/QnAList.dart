@@ -29,40 +29,6 @@ class qnalistPage extends StatelessWidget {
                     height: 0.0,
                     color: Colors.black12, thickness: 1.0)),
 
-            ListTile(
-              minVerticalPadding: 20.0,
-              title: Text('1:1 문의하기', style:TextStyle(color:Colors.black,
-                  fontSize:18,
-                  fontWeight: FontWeight.w500
-              )),
-              subtitle: Text('개별 문의 등록하기'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context)=>payPage())
-                );
-              },
-            ),
-            Container(width: 500,
-                child: Divider(
-                    height: 0.0,
-                    color: Colors.black12, thickness: 1.0)),
-
-            ListTile(
-              minVerticalPadding: 20.0,
-              title: Text('문의 내역 보기', style:TextStyle(color:Colors.black,
-                fontSize:18,
-              )),
-              subtitle: Text('나의 문의 모아보기 '),
-              onTap: () {
-                //Navigator.pop(context);
-              },
-            ),
-            Container(width: 500,
-                child: Divider(
-                    height: 0.0,
-                    color: Colors.black12, thickness: 1.0)),
-
           ],
         ),
 

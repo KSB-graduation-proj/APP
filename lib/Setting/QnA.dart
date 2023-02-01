@@ -2,9 +2,6 @@ import 'package:app_test/Setting/QnAList.dart';
 import 'package:app_test/Setting/askQnA.dart';
 import 'package:flutter/material.dart';
 
-
-enum Menu { itemOne, itemTwo, itemThree, itemFour }
-
 class qnaPage extends StatelessWidget {
   const qnaPage({Key? key}) : super(key: key);
 
