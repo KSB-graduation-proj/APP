@@ -1,3 +1,5 @@
+import 'package:app_test/login/login.dart';
+import 'package:app_test/pages/point.dart';
 import 'package:flutter/material.dart';
 import 'package:app_test/pages/mainPage.dart';
 import 'package:app_test/pages/myPage.dart';
@@ -95,14 +97,45 @@ class _Home extends State<Home> {
               ListTile(
                 title: Text('포인트'),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder:(context) => pointPage(),),
+                  );
                 },
               ),
               ListTile(
                 title: Text('Logout'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
+                onTap: () => showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('로그아웃'),
+                      content: const Text('로그아웃 하시겠습니까?'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'Cancel'),
+                          child: const Text('아니요'),
+                        ),
+                        TextButton(
+                          onPressed:() => showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              content: const Text('로그아웃이 완료되었습니다.'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context)=>loginPage()));
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          child: const Text('예'),
+                        ),
+                      ],
+                    ),
+                  ),
               ),
             ],
           ),

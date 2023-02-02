@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:app_test/bill/bill.dart';
+import 'package:flutter/material.dart';
 
 class myPage extends StatelessWidget {
   const myPage({Key? key}) : super(key: key);
@@ -155,7 +155,7 @@ class _billDescription extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder:(context) => billScreen(),),
+                          MaterialPageRoute(builder:(context) => billScreen()),
                         );
                       },
                       child: const Text('상세보기'),

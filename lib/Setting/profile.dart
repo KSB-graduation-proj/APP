@@ -1,3 +1,5 @@
+import 'package:app_test/login/login.dart';
+import 'package:app_test/pages/mainPage.dart';
 import 'package:flutter/material.dart';
 
 class profilePage extends StatelessWidget {
@@ -57,20 +59,7 @@ class profilePage extends StatelessWidget {
               )),
               
             ),
-            ListTile(
-              minVerticalPadding: 15.0,
-
-              title: Text('아이디',
-                  style:TextStyle(color:Colors.black54,
-                      fontSize:15,
-                      fontWeight: FontWeight.w500
-                  )),
-              subtitle: Text('ewha1886',
-                  style:TextStyle(color:Colors.black,
-                      fontSize:18,
-                      fontWeight: FontWeight.w500
-                  )),
-            ),
+            
             ListTile(
               minVerticalPadding: 15.0,
 
@@ -80,6 +69,20 @@ class profilePage extends StatelessWidget {
                       fontWeight: FontWeight.w500
                   )),
               subtitle: Text('leewhain@ewhain.net',
+                  style:TextStyle(color:Colors.black,
+                      fontSize:18,
+                      fontWeight: FontWeight.w500
+                  )),
+            ),
+            ListTile(
+              minVerticalPadding: 15.0,
+
+              title: Text('포인트',
+                  style:TextStyle(color:Colors.black54,
+                      fontSize:15,
+                      fontWeight: FontWeight.w500
+                  )),
+              subtitle: Text('1886'+' 점',
                   style:TextStyle(color:Colors.black,
                       fontSize:18,
                       fontWeight: FontWeight.w500
@@ -105,8 +108,6 @@ class profilePage extends StatelessWidget {
                     height: 0.0,
                     color: Colors.black12, thickness: 1.0)),
 
-
-
             ListTile(
               minVerticalPadding: 20.0,
 
@@ -117,9 +118,37 @@ class profilePage extends StatelessWidget {
                   fontWeight: FontWeight.w600,
 
               )) ,
-              onTap: () {
-                //Navigator.pop(context);
-              },
+              onTap: () => showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('로그아웃'),
+                  content: const Text('로그아웃 하시겠습니까?'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'Cancel'),
+                      child: const Text('아니요'),
+                    ),
+                    TextButton(
+                      onPressed:() => showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          content: const Text('로그아웃이 완료되었습니다.'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context)=>loginPage()));
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      child: const Text('예'),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
