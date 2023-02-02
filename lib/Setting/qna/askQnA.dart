@@ -1,3 +1,4 @@
+import 'package:app_test/Setting/qna/QnA.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
@@ -137,34 +138,34 @@ class askqnaPage extends StatelessWidget {
   backgroundColor: Color(0xff2eb67d),
   elevation: 0.5,
   onPressed: () => showDialog<String>(
-  context: context,
-  builder: (BuildContext context) => AlertDialog(
-  title: const Text('문의 등록'),
-  content: const Text('문의를 등록하시겠습니까?'),
-  actions: <Widget>[
-  TextButton(
-  onPressed: () => Navigator.pop(context, 'Cancel'),
-  child: const Text('아니요'),
-  ),
-  TextButton(
-  onPressed:() => showDialog<String>(
-  context: context,
-  builder: (BuildContext context) => AlertDialog(
-  content: const Text('1:1 문의 등록이 완료되었습니다.'),
-  actions: <Widget>[
-  TextButton(
-  onPressed: () {
-  Navigator.pop(context);
-  },
-  child: const Text('OK'),
-  ),
-  ],
-  ),
-  ),
-  child: const Text('예'),
-  ),
-  ],
-  ),
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: const Text('1:1 문의 등록'),
+      content: const Text('이 문의를 등록하시겠습니까?'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(context, 'Cancel'),
+          child: const Text('아니요'),
+        ),
+        TextButton(
+          onPressed:() => showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              content: const Text('1:1 문의 등록이 완료되었습니다.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          ),
+          child: const Text('예'),
+        ),
+      ],
+    ),
   ),
   ),
   ],
