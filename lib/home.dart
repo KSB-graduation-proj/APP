@@ -5,7 +5,7 @@ import 'package:app_test/pages/mainPage.dart';
 import 'package:app_test/pages/myPage.dart';
 import 'package:app_test/pages/settingsPage.dart';
 import 'package:app_test/Setting/profile.dart';
-import 'package:app_test/Setting/QnA.dart';
+import 'package:app_test/Setting/qna/QnA.dart';
 
 
 void main() => runApp(const MyApp());

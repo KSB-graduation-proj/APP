@@ -1,8 +1,9 @@
 import 'package:app_test/Setting/refundInfo.dart';
+import 'package:app_test/login/quit.dart';
 import 'package:flutter/material.dart';
 import 'package:app_test/Setting/profile.dart';
 import 'package:app_test/Setting/pay.dart';
-import 'package:app_test/Setting/QnA.dart';
+import 'package:app_test/Setting/qna/QnA.dart';
 
 enum Menu { itemOne, itemTwo, itemThree, itemFour }
 
@@ -103,7 +104,10 @@ class settingsPage extends StatelessWidget {
                     fontWeight: FontWeight.w600
                   )),
                   onTap: () {
-                    //Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context)=>quitPage())
+                    );
                   },
                 ),
               ],

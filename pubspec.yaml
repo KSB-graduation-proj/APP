@@ -32,6 +32,7 @@ dependencies:
   flutter:
     sdk: flutter
   qrscan: ^0.3.3
+  toggle_switch: ^2.0.1
 
 
   # The following adds the Cupertino Icons font to your application.

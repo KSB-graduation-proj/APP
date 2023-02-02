@@ -1,5 +1,5 @@
-import 'package:app_test/Setting/QnAList.dart';
-import 'package:app_test/Setting/askQnA.dart';
+import 'package:app_test/Setting/qna/QnAList.dart';
+import 'package:app_test/Setting/qna/askQnA.dart';
 import 'package:flutter/material.dart';
 
 class qnaPage extends StatelessWidget {
