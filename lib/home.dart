@@ -8,24 +8,6 @@ import 'package:app_test/Setting/profile.dart';
 import 'package:app_test/Setting/qna/QnA.dart';
 
 
-void main() => runApp(const MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  static const String _title = 'Main';
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: _title,
-      theme: ThemeData(
-          //colorSchemeSeed: const Color(0xff2eb67d), useMaterial3: true,
-          scaffoldBackgroundColor: Colors.white),
-      home: Home(),
-    );
-  }
-}
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -124,7 +106,7 @@ class _Home extends State<Home> {
                                 TextButton(
                                   onPressed: () {
                                     Navigator.push(context,
-                                        MaterialPageRoute(builder: (context)=>loginPage()));
+                                        MaterialPageRoute(builder: (context)=>MyApp()));
                                   },
                                   child: const Text('OK'),
                                 ),

@@ -2,6 +2,25 @@ import 'package:app_test/login/signup.dart';
 import 'package:app_test/home.dart';
 import 'package:flutter/material.dart';
 
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  static const String _title = 'Main';
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: _title,
+      theme: ThemeData(
+        //colorSchemeSeed: const Color(0xff2eb67d), useMaterial3: true,
+          scaffoldBackgroundColor: Colors.white),
+      home: loginPage(),
+    );
+  }
+}
+
 class loginPage extends StatelessWidget {
   const loginPage({Key? key}) : super(key: key);
 
@@ -142,7 +161,7 @@ class LoginFormState extends State<LoginForm> {
                   const SnackBar(content: Text('로그인 중 ...')),
                 );
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context)=>MyApp()));
+                    MaterialPageRoute(builder: (context)=>Home()));
                     //이부분 argument 전달로 바꿔야함
               }
             },

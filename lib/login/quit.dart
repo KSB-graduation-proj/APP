@@ -124,15 +124,12 @@ class LoginFormState extends State<LoginForm> {
                           TextButton(
                             onPressed: () {
                               Navigator.push(context,
-                                  MaterialPageRoute(builder: (context)=>loginPage()));
+                                  MaterialPageRoute(builder: (context)=>MyApp()));
                             },
                             child: const Text('OK'),
                           ),
                         ],
                       ),);
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context)=>loginPage()));
-                      //이부분 argument 전달로 바꿔야함
                     }
                   },
                   child: const Text('계정 삭제'),
@@ -143,27 +140,6 @@ class LoginFormState extends State<LoginForm> {
 
 
         ],
-      ),
-    );
-  }
-}
-class signupBtn extends StatelessWidget {
-  const signupBtn({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder:(context) => signupPage()),
-        );
-      },
-      child: const Padding(
-        padding: EdgeInsets.all(0.0),
-        child: Text('회원가입', style: TextStyle(color: Color(0xff2eb67d),
-            fontSize: 15),
-        ),
       ),
     );
   }

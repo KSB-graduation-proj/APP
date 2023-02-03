@@ -1,6 +1,5 @@
 import 'package:app_test/login/login.dart';
 import 'package:flutter/material.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 class signupPage extends StatelessWidget {
   const signupPage({Key? key}) : super(key: key);
@@ -258,7 +257,7 @@ class LoginFormState extends State<LoginForm> {
                                   TextButton(
                                     onPressed: () {
                                       Navigator.push(context,
-                                          MaterialPageRoute(builder: (context)=>loginPage()));
+                                          MaterialPageRoute(builder: (context)=>MyApp()));
                                     },
                                     child: const Text('OK'),
                                   ),

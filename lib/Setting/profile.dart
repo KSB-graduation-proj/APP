@@ -137,7 +137,7 @@ class profilePage extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 Navigator.push(context,
-                                    MaterialPageRoute(builder: (context)=>loginPage()));
+                                    MaterialPageRoute(builder: (context)=>MyApp()));
                               },
                               child: const Text('OK'),
                             ),
