@@ -8,6 +8,7 @@ class qnaPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         iconTheme: IconThemeData(
             color: Colors.black),

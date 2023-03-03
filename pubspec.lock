@@ -184,13 +184,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.6.2"
-  qrscan:
+  qr_code_scanner:
     dependency: "direct main"
     description:
-      name: qrscan
+      name: qr_code_scanner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.3"
+    version: "1.0.1"
   settings_ui:
     dependency: "direct main"
     description:

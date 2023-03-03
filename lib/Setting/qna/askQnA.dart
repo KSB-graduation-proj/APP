@@ -1,4 +1,5 @@
 import 'package:app_test/Setting/qna/QnA.dart';
+import 'package:app_test/home.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
@@ -29,151 +30,182 @@ class askqnaPage extends StatelessWidget {
   //\\mainAxisAlignment: MainAxisAlignment.center,
   children: [
   SizedBox(height: 30,),
+  qnaForm(),
 
-  Row(
-  children: [
-  SizedBox(width: 20,),
-  const Text('주문 번호',
-  style: TextStyle(color: Colors.black,
-  fontSize:15,
-  fontWeight: FontWeight.w600,
-  ),
-  ),
-  ],
-  ),
-
-  Row(
-  children: <Widget>[
-  Expanded(
-  flex: 1, // 20%
-  child: Container(color: Colors.transparent),
-  ),
-  Expanded(
-  flex: 14, // 60%
-  child: DropdownButtonExample(),
-  ),
-  Expanded(
-  flex: 1, // 20%
-  child: Container(color: Colors.transparent),
-  )
-  ],
-  ),
-
-  SizedBox(height: 10,),
-  Row(
-  children: [
-  SizedBox(width: 20,),
-  const Text('문의 카테고리',
-  style: TextStyle(color: Colors.black,
-  fontSize:15,
-  fontWeight: FontWeight.w600,
-  ),
-  ),
-  ],
-  ),
-  Row(
-  children: <Widget>[
-  Expanded(
-  flex: 1, // 20%
-  child: Container(color: Colors.transparent),
-  ),
-  Expanded(
-  flex: 14, // 60%
-  child: DropdownButtonExample1(),
-  ),
-  Expanded(
-  flex: 1, // 20%
-  child: Container(color: Colors.transparent),
-  )
-  ],
-  ),
-  SizedBox(height: 10,),
-
-  Row(
-  children: [
-  SizedBox(width: 20,),
-  const Text('문의 내용',
-  style: TextStyle(color: Colors.black,
-  fontSize:15,
-  fontWeight: FontWeight.w600,
-  ),
-  ),
-  ],
-  ),
-  SizedBox(height: 20,),
-  Row(
-  children: <Widget>[
-  Expanded(
-  flex: 1, // 20%
-  child: Container(color: Colors.transparent),
-  ),
-  Expanded(
-  flex: 14, // 60%
-  child: TextField(
-  maxLines: 6,
-  minLines: 1,
-  decoration: InputDecoration(
-  contentPadding: EdgeInsets.fromLTRB(20.0, 50.0, 20.0, 50.0),
-  labelText: '1:1 문의하기',
-  hintText: '상세 문의 내용을 입력하세요. ',
-  labelStyle: TextStyle(color: Colors.black54 ),
-  focusedBorder: OutlineInputBorder(),
-
-  ),
-  )
-  ),
-  Expanded(
-  flex: 1, // 20%
-  child: Container(color: Colors.transparent),
-  )
-  ],
-  ),
-  SizedBox(height: 30,),
-
-  FloatingActionButton.extended(
-  label: const Text('                          문의하기                          ',
-  style:TextStyle(color:Colors.white,
-  fontSize:17,
-  fontWeight: FontWeight.w800)),
-  backgroundColor: Color(0xff2eb67d),
-  elevation: 0.5,
-  onPressed: () => showDialog<String>(
-    context: context,
-    builder: (BuildContext context) => AlertDialog(
-      title: const Text('1:1 문의 등록'),
-      content: const Text('이 문의를 등록하시겠습니까?'),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pop(context, 'Cancel'),
-          child: const Text('아니요'),
-        ),
-        TextButton(
-          onPressed:() => showDialog<String>(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              content: const Text('1:1 문의 등록이 완료되었습니다.'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.popUntil(context, (route) => route.isFirst);
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            ),
-          ),
-          child: const Text('예'),
-        ),
-      ],
-    ),
-  ),
-  ),
   ],
   ),
   ),
   );
   }
   }
+
+class qnaForm extends StatefulWidget {
+  const qnaForm({super.key});
+  @override
+  qnaFormState createState() {
+    return qnaFormState();
+  }
+}
+
+class qnaFormState extends State<qnaForm> {
+  final qnaKey = GlobalKey<FormState>();
+
+  Widget build(BuildContext context) {
+    return Form(
+      key: qnaKey,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              SizedBox(width: 20,),
+              const Text('주문 번호',
+                style: TextStyle(color: Colors.black,
+                  fontSize:15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1, // 20%
+                child: Container(color: Colors.transparent),
+              ),
+              Expanded(
+                flex: 14, // 60%
+                child: DropdownButtonExample(),
+              ),
+              Expanded(
+                flex: 1, // 20%
+                child: Container(color: Colors.transparent),
+              )
+            ],
+          ),
+
+          SizedBox(height: 10,),
+          Row(
+            children: [
+              SizedBox(width: 20,),
+              const Text('문의 카테고리',
+                style: TextStyle(color: Colors.black,
+                  fontSize:15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1, // 20%
+                child: Container(color: Colors.transparent),
+              ),
+              Expanded(
+                flex: 14, // 60%
+                child: DropdownButtonExample1(),
+              ),
+              Expanded(
+                flex: 1, // 20%
+                child: Container(color: Colors.transparent),
+              )
+            ],
+          ),
+          SizedBox(height: 10,),
+
+          Row(
+            children: [
+              SizedBox(width: 20,),
+              const Text('문의 내용',
+                style: TextStyle(color: Colors.black,
+                  fontSize:15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20,),
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1, // 20%
+                child: Container(color: Colors.transparent),
+              ),
+              Expanded(
+                  flex: 14, // 60%
+                  child: TextFormField(
+                    maxLines: 6,
+                    minLines: 1,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.fromLTRB(20.0, 50.0, 20.0, 50.0),
+                      labelText: '1:1 문의하기',
+                      hintText: '상세 문의 내용을 입력하세요. ',
+                      labelStyle: TextStyle(color: Colors.black54 ),
+                      focusedBorder: OutlineInputBorder(),
+                    ),
+                    validator: (value)=> value==null||value.isEmpty?
+                    '문의 내용을 입력해주세요.':null ,
+                  )
+              ),
+              Expanded(
+                flex: 1, // 20%
+                child: Container(color: Colors.transparent),
+              )
+            ],
+          ),
+          SizedBox(height: 30,),
+
+          FloatingActionButton.extended(
+            label: const Text('                          문의하기                          ',
+                style:TextStyle(color:Colors.white,
+                    fontSize:17,
+                    fontWeight: FontWeight.w800)),
+            backgroundColor: Color(0xff2eb67d),
+            elevation: 0.5,
+            onPressed: () {
+              if(qnaKey.currentState!.validate()) {
+              showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('1:1 문의 등록'),
+                content: const Text('이 문의를 등록하시겠습니까?'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'Cancel'),
+                    child: const Text('아니요'),
+                  ),
+                  TextButton(
+                    onPressed:() => showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        content: const Text('1:1 문의 등록이 완료되었습니다.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder:(context)=>Home()));
+
+                              //Navigator.popUntil(context, (route) => route.isFirst);
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      ),
+                    ),
+                    child: const Text('예'),
+                  ),
+                ],
+              ),
+            );}}
+
+          ),
+        ],
+      ),
+    );
+  }
+}
+
   class DropdownButtonExample extends StatefulWidget {
   const DropdownButtonExample({super.key});
 
@@ -210,6 +242,7 @@ class askqnaPage extends StatelessWidget {
   );
   }
   }
+
   class DropdownButtonExample1 extends StatefulWidget {
   const DropdownButtonExample1({super.key});
 
