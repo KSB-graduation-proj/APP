@@ -11,7 +11,7 @@ class mainPage extends StatelessWidget {
           children: <Widget>[
             Text('결제 시 QR 코드를 보여주세요', style: TextStyle(color: Colors.black54),),
             Image.network(
-              'https://chart.apis.google.com/chart?cht=qr&chs=450x450&chl='+'1916011',
+              'https://chart.apis.google.com/chart?cht=qr&chs=450x450&chl='+'1816011',
             ),
             Text('안녕하세요, '+'이화인'+'님 !',
               style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold,

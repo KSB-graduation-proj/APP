@@ -1,28 +1,40 @@
 import 'dart:developer';
-import 'dart:io';
+import 'package:intl/intl.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-void main() => runApp(const MaterialApp(home: MyHome()));
+void main() => runApp(const MaterialApp(home: QrScan()));
 
-class MyHome extends StatelessWidget {
-  const MyHome({Key? key}) : super(key: key);
+class QrScan extends StatelessWidget {
+  const QrScan({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Flutter Demo Home Page')),
+      appBar: AppBar(
+          title: const Text('  Coop Go Admin',
+              style:TextStyle(color:Color(0xff2eb67d),
+                  fontSize:20,
+                  fontWeight: FontWeight.w500)),
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          centerTitle: true,
+          leading:
+          Builder(builder: (context){
+            return
+              IconButton(
+                icon: Icon(Icons.menu),
+                onPressed: (){
+                },
+                color: Color(0xff2eb67d),
+              );
+          })
+      ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const QRViewExample(),
-            ));
-          },
-          child: const Text('qrView'),
-        ),
+        child:
+             QRViewExample(),
       ),
     );
   }
@@ -37,26 +49,27 @@ class QRViewExample extends StatefulWidget {
 
 class _QRViewExampleState extends State<QRViewExample> {
   Barcode? result;
+  var date;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
-  @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      controller!.pauseCamera();
-    }
-    controller!.resumeCamera();
-  }
-
-  @override
+ // Barcode Type: ${describeEnum(result!.format)} = qrcode
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          Expanded(flex: 4, child: _buildQrView(context)),
+          Expanded(flex: 1, child: Column(
+            children:[
+              SizedBox(height: 65,),
+              Text('Coop-Go QR 코드를 보여주세요', style: TextStyle(color: Colors.black54),),
+
+            ]
+
+          )),
+          Expanded(flex: 3, child: _buildQrView(context)),
           Expanded(
             flex: 1,
             child: FittedBox(
@@ -64,32 +77,26 @@ class _QRViewExampleState extends State<QRViewExample> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  if (result != null)
-                    Text(
-                        'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
+                  SizedBox(height: 10,),
+                  if (result != null || date != null)
+                    Text('학번: ${result!.code}' '\n'
+                            '현재 시간: ${date!}'
+                           , style: TextStyle(color: Colors.black54, fontSize: 10,),textAlign: TextAlign.center,
+                      )
+
                   else
                     const Text('Scan a code'),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
+
                       Container(
                         margin: const EdgeInsets.all(8),
                         child: ElevatedButton(
-                            onPressed: () async {
-                              await controller?.toggleFlash();
-                              setState(() {});
-                            },
-                            child: FutureBuilder(
-                              future: controller?.getFlashStatus(),
-                              builder: (context, snapshot) {
-                                return Text('Flash: ${snapshot.data}');
-                              },
-                            )),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white, backgroundColor: Color(0xff2eb67d), // Text Color (Foreground color)
+                            ),
                             onPressed: () async {
                               await controller?.flipCamera();
                               setState(() {});
@@ -108,32 +115,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                       )
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            await controller?.pauseCamera();
-                          },
-                          child: const Text('pause',
-                              style: TextStyle(fontSize: 20)),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            await controller?.resumeCamera();
-                          },
-                          child: const Text('resume',
-                              style: TextStyle(fontSize: 20)),
-                        ),
-                      )
-                    ],
-                  ),
+                 
                 ],
               ),
             ),
@@ -147,7 +129,7 @@ class _QRViewExampleState extends State<QRViewExample> {
     // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
         MediaQuery.of(context).size.height < 400)
-        ? 150.0
+        ? 300.0
         : 300.0;
     // To ensure the Scanner view is properly sizes after rotation
     // we need to listen for Flutter SizeChanged notification and update controller
@@ -155,7 +137,7 @@ class _QRViewExampleState extends State<QRViewExample> {
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-          borderColor: Colors.red,
+          borderColor: Color(0xff2eb67d),
           borderRadius: 10,
           borderLength: 30,
           borderWidth: 10,
@@ -171,6 +153,12 @@ class _QRViewExampleState extends State<QRViewExample> {
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         result = scanData;
+        DateTime date2 = new DateTime.now();
+        date2 = date2.toUtc().add(Duration(hours:9));
+        date = DateFormat('yyyy-MM-dd hh:mm:ss').format(date2);
+
+
+        //이 결과를 서버로 전송해야됨
       });
     });
   }
