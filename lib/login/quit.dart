@@ -124,7 +124,7 @@ class LoginFormState extends State<LoginForm> {
                           TextButton(
                             onPressed: () {
                               Navigator.push(context,
-                                  MaterialPageRoute(builder: (context)=>MyApp()));
+                                  MaterialPageRoute(builder: (context)=>loginPage()));
                             },
                             child: const Text('OK'),
                           ),

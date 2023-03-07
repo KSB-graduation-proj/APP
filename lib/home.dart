@@ -6,16 +6,36 @@ import 'package:app_test/pages/myPage.dart';
 import 'package:app_test/pages/settingsPage.dart';
 import 'package:app_test/Setting/profile.dart';
 import 'package:app_test/Setting/qna/QnA.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class Home extends StatefulWidget {
+  /*String name;
+  bool coop;
+   Home({required this.name, required this.coop, Key? key}) ;*/
   const Home({super.key});
+
   @override
   State<Home> createState() => _Home();
 }
 
 class _Home extends State<Home> {
+
+  //_Home({required this.user, Key? key}) ;
+
+
+  final _auth = FirebaseAuth.instance;
+  final firestore = FirebaseFirestore.instance;
+
+
+  getData() async{
+    var result = await firestore.collection('member').doc('2A8Skx4ikA09oSJYv2IR').get();
+    print(result.data());
+    var name = result.id;
+    print(name);
+  }
+
   int _selectedIndex = 0;
 
   static const TextStyle optionStyle =
@@ -34,7 +54,13 @@ class _Home extends State<Home> {
   }
 
     @override
+
     Widget build(BuildContext context) {
+      var email = _auth.currentUser!.email.toString();
+      var name1 = _auth.currentUser!.displayName;
+      //학번(아이디)만 추출
+      var code = email.replaceFirst('@ewhain.net', '');
+      getData();
       return
         Scaffold(
         drawer: Drawer(
@@ -47,8 +73,9 @@ class _Home extends State<Home> {
                 currentAccountPicture: CircleAvatar(
                   backgroundImage: AssetImage('assets/profile1.jpg'),
                 ),
-                accountEmail: Text('leewhain@ewhain.net'),
-                accountName: Text('Ewha in'),
+                accountEmail: Text('${email}'),
+                accountName: Text('${name1}'),
+
 
                 decoration: BoxDecoration(
 
@@ -87,37 +114,7 @@ class _Home extends State<Home> {
               ),
               ListTile(
                 title: Text('Logout'),
-                onTap: () => showDialog<String>(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text('로그아웃'),
-                      content: const Text('로그아웃 하시겠습니까?'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, 'Cancel'),
-                          child: const Text('아니요'),
-                        ),
-                        TextButton(
-                          onPressed:() => showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              content: const Text('로그아웃이 완료되었습니다.'),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (context)=>MyApp()));
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            ),
-                          ),
-                          child: const Text('예'),
-                        ),
-                      ],
-                    ),
-                  ),
+                onTap: () {FirebaseAuth.instance.signOut();}
               ),
             ],
           ),
@@ -141,7 +138,11 @@ class _Home extends State<Home> {
                 },
                 color: Color(0xff2eb67d),
             );
-          })
+          }),
+            actions: [IconButton(onPressed: (){
+              FirebaseAuth.instance.signOut();
+            }, icon: Icon(Icons.logout),
+            color: Color(0xff2eb67d),)],
         ),
         body: SafeArea(
           child:_widgetOptions.elementAt(_selectedIndex),

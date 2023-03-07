@@ -1,12 +1,17 @@
 import 'package:app_test/login/login.dart';
 import 'package:app_test/pages/mainPage.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class profilePage extends StatelessWidget {
   const profilePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _auth = FirebaseAuth.instance;
+    var email = _auth.currentUser!.email.toString();
+    var code = email.replaceFirst('@ewhain.net', '');
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -52,7 +57,7 @@ class profilePage extends StatelessWidget {
                      
                   )),
 
-              subtitle: Text('18861004',
+              subtitle: Text('${code}',
                   style:TextStyle(color:Colors.black,
                   fontSize:18,
                   fontWeight: FontWeight.w500
@@ -68,7 +73,7 @@ class profilePage extends StatelessWidget {
                       fontSize:15,
                       fontWeight: FontWeight.w500
                   )),
-              subtitle: Text('leewhain@ewhain.net',
+              subtitle: Text('${email}',
                   style:TextStyle(color:Colors.black,
                       fontSize:18,
                       fontWeight: FontWeight.w500
@@ -118,37 +123,11 @@ class profilePage extends StatelessWidget {
                   fontWeight: FontWeight.w600,
 
               )) ,
-              onTap: () => showDialog<String>(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  title: const Text('로그아웃'),
-                  content: const Text('로그아웃 하시겠습니까?'),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, 'Cancel'),
-                      child: const Text('아니요'),
-                    ),
-                    TextButton(
-                      onPressed:() => showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          content: const Text('로그아웃이 완료되었습니다.'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context)=>MyApp()));
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ),
-                      ),
-                      child: const Text('예'),
-                    ),
-                  ],
-                ),
-              ),
+              onTap: () {FirebaseAuth.instance.signOut();
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(builder:(context) => loginPage(),),
+                        );}
             ),
           ],
         ),

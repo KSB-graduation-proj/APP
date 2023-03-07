@@ -1,21 +1,34 @@
 import 'package:app_test/login/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterfire_ui/auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class signupPage extends StatelessWidget {
-  const signupPage({Key? key}) : super(key: key);
+class signupPage extends StatefulWidget {
+  @override
+  _signupPage createState() => _signupPage();
+}
+
+class _signupPage extends State<signupPage> {
+  bool _isChecked = false;
+  String? name;
+  String? email;
+  String? password;
+  String? repassword;
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         iconTheme: IconThemeData(
             color: Colors.black),
-        title: const Text('회원가입',
+        title: const Text('Sign Up',
             textAlign: TextAlign.center,
             style:TextStyle(color:Colors.black,
-                fontSize:20,
-                fontWeight: FontWeight.w600)),
+                fontSize:23,
+                fontWeight: FontWeight.w400)),
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         centerTitle: true,
@@ -26,18 +39,113 @@ class signupPage extends StatelessWidget {
           //mainAxisAlignment: MainAxisAlignment.center,
           //crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(width: 500,
-                child: Divider(
-                    height: 0.0,
-                    color: Colors.black12, thickness: 1.0)),
-            SizedBox(height: 30,),
-            const LoginForm(),
-            SizedBox(height: 20,),
-            Row(children: [
-              SizedBox(width: 95,),
+          SizedBox(height: 80,),
+            CustomTextField(label: "Name", onChangefunc: (newText){name= newText;}, isPassword: false,),
+            SizedBox(height: 5,),
+            CustomTextField(label: "Email" ,onChangefunc: (newText){email= newText;}, isPassword: false,),
+            Row(
+              children: [
+                SizedBox(width: 30,),
+                Text('학번@ewhain.net 형태로 입력하세요.',style: TextStyle(color: Colors.grey),),
 
-            ]
+              ],
             ),
+            SizedBox(height: 5,),
+            CustomTextField(label: "Password", onChangefunc: (newText){password= newText;}, isPassword: true,),
+            SizedBox(height: 5,),
+            CustomTextField(label: "Re-Password", onChangefunc: (newText){repassword= newText;}, isPassword: true,),
+            SizedBox(height: 5,),
+            Row(children: [
+              SizedBox(width: 25,),
+              Text('이화여대 생협 조합원인가요?',style: TextStyle(fontSize: 15, color: Colors.black54),),
+              Switch(
+                  activeColor: Color(0xff2eb67d),
+                  inactiveThumbColor: Colors.pink,
+                  activeTrackColor: Colors.black12,
+                  inactiveTrackColor: Colors.black12,
+                  value: _isChecked,
+                  onChanged: (value) {
+                    setState(() {
+                      _isChecked = value;
+                    });}),
+            ],),
+            SizedBox(height: 50,),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor: Color(0xff2eb67d),
+            padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 70.0),
+            textStyle: const TextStyle(fontSize: 20,
+                fontWeight: FontWeight.bold),
+          ),
+          onPressed: () async{
+            if(password != repassword){
+              showDialog(context: context,
+                  builder: (context){
+                    return AlertDialog(
+                      content: Text('비밀번호가 일치하지 않습니다.'),
+                      actions: [TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text("OK"))],
+                    );
+                  });
+            }else{
+              if(name!=null && email !=null && password !=null){
+                try{
+                  UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                      email: email!,
+                      password: password!,
+                  );
+                  FirebaseFirestore firestore = FirebaseFirestore.instance;
+                  firestore.collection('member').add(
+                      {'coopMember': _isChecked,
+                        'email':email,
+                        'id': email.toString().replaceFirst('@ewhain.net', ''),
+                        'name':name,
+                        'password':password,
+                      }
+                  );
+                  showDialog(context: context,
+                      builder: (context){
+                        return AlertDialog(
+                          content: Text('회원가입이 완료되었습니다.'),
+                          actions: [TextButton(onPressed: (){Navigator.push(
+                            context,
+                              MaterialPageRoute(builder:(context) => loginPage())
+                            //MaterialPageRoute(builder:(context) => loginPage(name: name!, coop: _isChecked!))
+                          );}, child: Text("OK"))],
+                        );
+                      });
+                  }on FirebaseAuthException catch(e){
+                  if(e.code == "weak-password"){
+                    print('비밀번호 보안 약함');
+                    showDialog(context: context,
+                        builder: (context){
+                          return AlertDialog(
+                            content: Text("비밀번호 보안이 약합니다."),
+                            actions: [TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('OK'))],
+                          );
+                        });
+                  }else if (e.code == 'email-already-in-use'){
+                    print('이미 사용중인 이메일');
+                    showDialog(context: context,
+                        builder: (context){
+                          return AlertDialog(
+                            content: Text("이미 사용중인 이메일입니다."),
+                            actions: [TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('OK'))],
+                          );
+                        });
+                  }
+
+                }catch(e){
+                  print(e);
+                }
+              }
+            }
+          },
+          child:  Container(
+            width: 210,
+            child: const Text('로그인', textAlign: TextAlign.center,),
+          )
+        ),
 
           ],
         ),
@@ -45,240 +153,44 @@ class signupPage extends StatelessWidget {
     );
   }
 }
+class CustomTextField extends StatelessWidget {
+  String label;
+  void Function(String text) onChangefunc;
+  bool isPassword;
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+  CustomTextField({
+    required this.label,
+    required this.onChangefunc,
+    required this.isPassword,
+    Key? key,
+  }) : super(key: key);
+
   @override
-  LoginFormState createState() {
-    return LoginFormState();
-  }
-}
-
-class LoginFormState extends State<LoginForm> {
-  final signKey = GlobalKey<FormState>();
-
-  bool _isChecked = false;
   Widget build(BuildContext context) {
-    return Form(
-      key: signKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(children: [
-            SizedBox(width: 20,),
-            Text('이름',style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.w600,color: Color(0xff2eb67d)),),
-          ],),
-           Row(
-            children: [
-              Expanded(
-                flex: 1, // 20%
-                child: Container(color: Colors.transparent),
-              ),
-              Expanded(
-                flex: 14, // 20%
-                child: TextFormField(
-                  textAlign: TextAlign.start,
-                  keyboardType: TextInputType.name,
-                  cursorColor: Color(0xff2eb67d),
-                  decoration: InputDecoration(
-                    hintText: '이름을 입력하세요',
-                      hintStyle: TextStyle(fontSize: 15),
-                      contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 0.0),
-                      hoverColor: Color(0xff2eb67d)
-                  ),
-                  validator: (value)=> value==null||value.length<2?
-                  '정확한 값을 입력하세요':null,
-                ),
-              ),
-              Expanded(
-                flex: 1, // 20%
-                child: Container(color: Colors.transparent),
-              )
-            ],
-          ),
-          SizedBox(height: 30,),
-          Row(children: [
-            SizedBox(width: 20,),
-            Text('아이디',style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.w600,color: Color(0xff2eb67d)),),
-          ],),
-          Row(
-            children: [
-              Expanded(
-                flex: 1, // 20%
-                child: Container(color: Colors.transparent),
-              ),
-              Expanded(
-                flex: 14, // 20%
-                child: TextFormField(
-                  textAlign: TextAlign.start,
-                  keyboardType: TextInputType.number,
-                  cursorColor: Color(0xff2eb67d),
-                  decoration: InputDecoration(
-                      hintText: '학번 7자리를 입력하세요',
-                      hintStyle: TextStyle(fontSize: 15),
-                      contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 0.0),
-                      hoverColor: Color(0xff2eb67d)
-                  ),
-                  validator: (value)=> value==null||value.isEmpty||value.length<7||value.length>7?
-                  '학번은 숫자 7자리입니다.':null ,
-
-                ),
-              ),
-              Expanded(
-                flex: 1, // 20%
-                child: Container(color: Colors.transparent),
-              )
-            ],
-          ),
-          SizedBox(height: 30,),
-          Row(children: [
-            SizedBox(width: 20,),
-            Text('이메일',style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.w600,color: Color(0xff2eb67d)),),
-          ],),
-          Row(
-            children: [
-              Expanded(
-                flex: 1, // 20%
-                child: Container(color: Colors.transparent),
-              ),
-              Expanded(
-                flex: 14, // 20%
-                child: TextFormField(
-                  textAlign: TextAlign.start,
-                  keyboardType: TextInputType.emailAddress,
-                  cursorColor: Color(0xff2eb67d),
-                  decoration: InputDecoration(
-                      hintText: '학교 이메일을 입력하세요',
-                      hintStyle: TextStyle(fontSize: 15),
-                      contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 0.0),
-                      hoverColor: Color(0xff2eb67d)
-                  ),
-                  validator: (value)=> value==null||value.isEmpty?
-                  '이메일 형식에 맞게 입력해주세요.':null ,
-                ),
-              ),
-              Expanded(
-                flex: 1, // 20%
-                child: Container(color: Colors.transparent),
-              )
-            ],
-          ),
-          SizedBox(height: 30,),
-          Row(children: [
-            SizedBox(width: 20,),
-            Text('생협 조합원',style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.w600,color: Color(0xff2eb67d)),),
-          ],),
-          SizedBox(height: 10,),
-          Row(children: [
-            SizedBox(width: 25,),
-            Text('이화여대 생협 조합원인가요?',style: TextStyle(fontSize: 15, color: Colors.black54),),
-            Switch(
-                activeColor: Color(0xff2eb67d),
-                inactiveThumbColor: Colors.pink,
-                activeTrackColor: Colors.black12,
-                inactiveTrackColor: Colors.black12,
-                value: _isChecked,
-                onChanged: (value) {
-                  setState(() {
-                    _isChecked = value;
-                  });}),
-          ],),
-          SizedBox(height: 20,),
-          Row(children: [
-            SizedBox(width: 20,),
-            Text('비밀번호',style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.w600,color: Color(0xff2eb67d)),),
-          ],),
-          Row(
-            children: [
-              Expanded(
-                flex: 1, // 20%
-                child: Container(color: Colors.transparent),
-              ),
-              Expanded(
-                flex: 14, // 20%
-                child: TextFormField(
-                  textAlign: TextAlign.start,
-                  keyboardType: TextInputType.visiblePassword,
-                  cursorColor: Color(0xff2eb67d),
-                  decoration: InputDecoration(
-                      hintText: '비밀번호를 입력하세요',
-                      hintStyle: TextStyle(fontSize: 15),
-                      contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 0.0),
-                      hoverColor: Color(0xff2eb67d)
-                  ),
-                  validator: (value)=> value==null||value.isEmpty?
-                  '비밀번호를 입력해주세요':null ,
-                ),
-              ),
-              Expanded(
-                flex: 1, // 20%
-                child: Container(color: Colors.transparent),
-              )
-            ],
-          ),
-    
-   
-
-    SizedBox(height: 30,),
-          Row(
-              children:[
-                SizedBox(width: 90,),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Color(0xff2eb67d),
-                    padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 80.0),
-                    textStyle: const TextStyle(fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: () {
-                    if (signKey.currentState!.validate()) {
-                      showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                        title: const Text('Coop-go 회원가입'),
-                        content: const Text('Coop go에 가입 하시겠습니까?'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, 'Cancel'),
-                            child: const Text('아니요'),
-                          ),
-                          TextButton(
-                            onPressed:() => showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                content: const Text('회원가입이 완료되었습니다.'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context)=>MyApp()));
-                                    },
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            child: const Text('예'),
-                          ),
-                        ],
-                      ),);// 로그인화면으로 돌아감
-                    }
-                  },
-                  child: const Text('가입하기'),
-                ),
-              ]
-
-          ),
-
-
-        ],
-      ),
-    );
+    return Padding(padding: const EdgeInsets.fromLTRB(30.0,10.0,30.0,5.0),
+      child:
+      TextField(
+        onChanged: (newText) {
+          onChangefunc(newText);
+        },
+        obscureText: isPassword? true : false,
+        textAlign: TextAlign.center,
+        cursorColor: Color(0xff2eb67d),
+        decoration: InputDecoration(
+            hintStyle: TextStyle(fontSize: 20),
+            contentPadding: EdgeInsets.symmetric(
+                vertical: 20.0, horizontal: 10.0),
+            labelText: label,
+            labelStyle: TextStyle(color: Colors.black54,
+                fontWeight: FontWeight.w400,
+                fontSize: 16)
+            ,
+            focusColor: Color(0xff2eb67d),
+            hoverColor: Color(0xff2eb67d)
+        ),),);
   }
+
 }
+
+
+

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "203574439395",
+    "firebase_url": "https://coopgo-b58bd-default-rtdb.firebaseio.com",
+    "project_id": "coopgo-b58bd",
+    "storage_bucket": "coopgo-b58bd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:203574439395:android:3280a5d59efb9c80eb04d6",
+        "android_client_info": {
+          "package_name": "com.example.app_test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "203574439395-q12jivopohkba12ufooja85fc5d4i3t8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgV3FQiNF4Lb-otEEtBZKvVxTffQfFQzA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "203574439395-q12jivopohkba12ufooja85fc5d4i3t8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
