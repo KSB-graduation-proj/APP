@@ -4,12 +4,38 @@ import 'package:flutter/material.dart';
 import 'package:app_test/Setting/profile.dart';
 import 'package:app_test/Setting/pay.dart';
 import 'package:app_test/Setting/qna/QnA.dart';
+import 'package:app_test/firebase.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-enum Menu { itemOne, itemTwo, itemThree, itemFour }
+class settingsPage extends StatefulWidget{
+  const settingsPage({super.key});
 
-class settingsPage extends StatelessWidget {
-  const settingsPage({Key? key}) : super(key: key);
-
+  @override
+  State<settingsPage> createState() => _settingsPage();
+}
+class _settingsPage extends State<settingsPage> {
+  String? name;
+  bool? coopMember;
+  String? coop;
+  @override
+  void initState() {
+    super.initState();
+    setData();
+  }
+  void setData(){
+    final doc = firestore.collection('member').doc("${email}");
+    doc.get().then((DocumentSnapshot doc)
+    {
+      setState(() {
+        final data = doc.data() as Map<String,dynamic>;
+        name = data['name'];
+        coopMember = data['coopMember'];
+        if(coopMember==true){
+          coop='조합원';}
+        else{coop='비조합원';}
+      });
+    },);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +60,7 @@ class settingsPage extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context)=>profilePage())
+                      MaterialPageRoute(builder: (context)=>profilePage(name,coop))
                     );
                   },
                 ),

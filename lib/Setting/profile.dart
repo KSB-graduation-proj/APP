@@ -1,17 +1,15 @@
 import 'package:app_test/login/login.dart';
-import 'package:app_test/pages/mainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:app_test/firebase.dart';
 
 class profilePage extends StatelessWidget {
-  const profilePage({Key? key}) : super(key: key);
+  final name;
+  final coop;
+  const profilePage(this.name, this.coop);
 
   @override
   Widget build(BuildContext context) {
-    final _auth = FirebaseAuth.instance;
-    var email = _auth.currentUser!.email.toString();
-    var code = email.replaceFirst('@ewhain.net', '');
-
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -37,7 +35,7 @@ class profilePage extends StatelessWidget {
                     fit:BoxFit.fill)
             ),
             SizedBox(height: 10.0,),
-            Text('이화인', textAlign: TextAlign.center,
+            Text('$name', textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
@@ -87,7 +85,7 @@ class profilePage extends StatelessWidget {
                       fontSize:15,
                       fontWeight: FontWeight.w500
                   )),
-              subtitle: Text('1886'+' 점',
+              subtitle: Text('point 점',
                   style:TextStyle(color:Colors.black,
                       fontSize:18,
                       fontWeight: FontWeight.w500
@@ -101,7 +99,7 @@ class profilePage extends StatelessWidget {
                       fontSize:15,
                       fontWeight: FontWeight.w500
                   )),
-              subtitle: Text('조합원',
+              subtitle: Text('$coop',
                   style:TextStyle(color:Colors.black,
                       fontSize:18,
                       fontWeight: FontWeight.w500

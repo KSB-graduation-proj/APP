@@ -95,14 +95,22 @@ class _signupPage extends State<signupPage> {
                       password: password!,
                   );
                   FirebaseFirestore firestore = FirebaseFirestore.instance;
-                  firestore.collection('member').add(
+                  final member = firestore.collection("member");
+                  final data = <String, dynamic>{'coopMember': _isChecked,
+                    'email':email,
+                    'id': email.toString().replaceFirst('@ewhain.net', ''),
+                    'name':name,
+                    'password':password,
+                  };
+                  member.doc(email).set(data);
+                  /*firestore.collection('member').add(
                       {'coopMember': _isChecked,
                         'email':email,
                         'id': email.toString().replaceFirst('@ewhain.net', ''),
                         'name':name,
                         'password':password,
                       }
-                  );
+                  );*/
                   showDialog(context: context,
                       builder: (context){
                         return AlertDialog(
@@ -143,7 +151,7 @@ class _signupPage extends State<signupPage> {
           },
           child:  Container(
             width: 210,
-            child: const Text('로그인', textAlign: TextAlign.center,),
+            child: const Text('회원가입', textAlign: TextAlign.center,),
           )
         ),
 

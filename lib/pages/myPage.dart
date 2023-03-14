@@ -1,8 +1,39 @@
 import 'package:app_test/bill/bill.dart';
 import 'package:flutter/material.dart';
+import 'package:app_test/firebase.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class myPage extends StatelessWidget {
+class myPage extends StatefulWidget {
   const myPage({Key? key}) : super(key: key);
+  @override
+  State<myPage> createState() => _myPage();
+}
+
+class _myPage extends State<myPage>{
+  String? name;
+  bool? coopMember;
+  String? coop;
+
+  @override
+  void initState() {
+    super.initState();
+    setData();
+  }
+
+  void setData(){
+    final doc = firestore.collection('member').doc("${email}");
+    doc.get().then((DocumentSnapshot doc)
+    {
+      setState(() {
+        final data = doc.data() as Map<String,dynamic>;
+        name = data['name'];
+        coopMember = data['coopMember'];
+        if(coopMember==true){
+          coop='조합원';}
+        else{coop='비조합원';}
+      });
+    },);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +52,7 @@ class myPage extends StatelessWidget {
                       fit:BoxFit.fill)
               ),
               SizedBox(height: 10.0,),
-               Text('이화인', textAlign: TextAlign.center,
+               Text('$name', textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
@@ -29,13 +60,13 @@ class myPage extends StatelessWidget {
                 ),
               ),
              SizedBox(height: 10.0,),
-             Text('조합원',textAlign: TextAlign.center,
+             Text('$coop',textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.black54,
                 ),
-              ),
-              SizedBox(height: 10.0,),
+              )
+              ,SizedBox(height: 10.0,),
               const MyStatelessWidget(),
             ],
           ),
