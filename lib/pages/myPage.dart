@@ -2,6 +2,7 @@ import 'package:app_test/bill/bill.dart';
 import 'package:flutter/material.dart';
 import 'package:app_test/firebase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class myPage extends StatefulWidget {
   const myPage({Key? key}) : super(key: key);
@@ -9,15 +10,22 @@ class myPage extends StatefulWidget {
   State<myPage> createState() => _myPage();
 }
 
+
+
 class _myPage extends State<myPage>{
   String? name;
   bool? coopMember;
   String? coop;
+  List<dynamic> orderId=[];
+  List<dynamic> time=[];
+  List<dynamic> isPaid=[];
+  List<dynamic> totalPrice=[];
 
   @override
   void initState() {
     super.initState();
     setData();
+    getBillData();
   }
 
   void setData(){
@@ -34,6 +42,44 @@ class _myPage extends State<myPage>{
       });
     },);
   }
+  List<String>? keytoList(Map){
+    List<String> list =[];
+    for (String temp in Map){
+      list.add(temp);
+    }
+    return list;
+  }
+
+  void getBillData() {
+    final doc = firestore.collection('payment').doc("${email}");
+    doc.get().then((DocumentSnapshot doc)
+    {
+      setState(() {
+        final data = doc.data() as Map<String,dynamic>; // 모든 영수증 데이터
+        List<String>? bill = keytoList(data.keys);
+        for(int i=0; i< bill!.length ;i++) {
+          var bill1 = data[bill![i]]; // 모든 결제번호 데이터
+          var orderId1 =bill1!['orderId'].toString();
+          orderId.add(orderId1);
+          var time1 = bill1['time'].toDate().toUtc().add(Duration(hours:9));
+          var date1 = DateFormat('yy/MM/dd HH:mm').format(time1);
+          print(time1); print(date1);
+          time.add(date1);
+          var isPaid1 = bill1['isPaid'];
+          var isPaid2;
+          if(isPaid1==true){
+            isPaid2='결제완료';}
+          else{isPaid2='결제실패';}
+          isPaid.add(isPaid2);
+          var totalPrice1 = bill1['totalPrice'];
+          var f = NumberFormat("#,###");
+          totalPrice.add(f.format(totalPrice1));
+        }print('$orderId,$time,$isPaid,$totalPrice');
+      });
+    },);
+
+    }
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +113,19 @@ class _myPage extends State<myPage>{
                 ),
               )
               ,SizedBox(height: 10.0,),
-              const MyStatelessWidget(),
+              Column(
+                children: [
+                  for (int i=0;i<orderId.length;i++)
+                    CustomListItemTwo(
+                      title: '${time[i]} 결제 영수증',
+                      orderno: '주문번호: ${orderId[i]}',
+                      payment: '${isPaid[i]}',
+                      price: '결제 금액 ₩ ${totalPrice[i]}',
+                    ),
+
+                ],
+
+              )
             ],
           ),
 
@@ -186,7 +244,7 @@ class _billDescription extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder:(context) => billScreen()),
+                          MaterialPageRoute(builder:(context) => billScreen()),//orderno전달해서 화면 이어지게
                         );
                       },
                       child: const Text('상세보기'),
@@ -261,44 +319,4 @@ class CustomListItemTwo extends StatelessWidget {
   }
 }
 
-class MyStatelessWidget extends StatelessWidget {
-  const MyStatelessWidget({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-
-          child: Column(
-            //physics: const AlwaysScrollableScrollPhysics(),
-            //scrollDirection: Axis.vertical,
-            //shrinkWrap: true,
-            //padding: const EdgeInsets.all(10.0),
-            children: <Widget>[
-              CustomListItemTwo(
-                title: '2022 11 11 결제 영수증',
-                orderno: '주문번호: eng20221111125835lwi',
-                payment: '결제완료',
-                price: '결제 금액 ₩ 14,800',
-              ),
-              CustomListItemTwo(
-                title: '2022 11 10 결제 영수증',
-                orderno: '주문번호: ssg202211101045231lwi',
-                payment: '결제완료',
-                price: '결제 금액 ₩ 9,400',
-              ),
-              CustomListItemTwo(
-                  title: '2022 11 09 결제 영수증',
-                  orderno: '주문번호: pos20221109132519lwi',
-                  payment: '결제완료',
-                  price: '결제 금액 ₩ 5,200'
-              ),
-            ],
-
-          )
-      ),
-
-    );
-  }
-}

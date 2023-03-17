@@ -1,7 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:app_test/firebase.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class pointPage extends StatelessWidget {
-  const pointPage({Key? key}) : super(key: key);
+class pointPage extends StatefulWidget {
+  const pointPage({super.key});
+
+  @override
+  State<pointPage> createState() => _pointPage();
+}
+
+class _pointPage extends State<pointPage> {
+  int? point;
+  bool? coopMember;
+
+  void initState() {
+    super.initState();
+    setData();
+  }
+
+  void setData(){
+    final doc = firestore.collection('memberCoop').doc("${email}");
+    doc.get().then((DocumentSnapshot doc)
+    {
+      setState(() {
+        final data = doc.data() as Map<String,dynamic>;
+        point = data['point'];
+        coopMember = data['coopMember'];
+      });
+    },);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +53,7 @@ class pointPage extends StatelessWidget {
             SizedBox(height: 140.0,),
             Row(
                 children:[
-                  SizedBox(width: 100.0,),
+                  SizedBox(width: 120.0,),
                 Icon(
                   Icons.sports_score,
                   size: 200.0,
@@ -41,13 +68,14 @@ class pointPage extends StatelessWidget {
             fontWeight: FontWeight.bold,
             color: Colors.black54,
           ),),
-            Text('1886' +' 점', textAlign: TextAlign.center,
+            Text('$point 점', textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 60,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
             ),
+
 
 
           ],

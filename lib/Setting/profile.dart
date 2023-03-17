@@ -2,11 +2,35 @@ import 'package:app_test/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:app_test/firebase.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class profilePage extends StatelessWidget {
+class profilePage extends StatefulWidget {
   final name;
   final coop;
   const profilePage(this.name, this.coop);
+
+  @override
+  State<profilePage> createState() => _profilePage();
+}
+
+class _profilePage extends State<profilePage> {
+  int? point;
+
+  void initState() {
+    super.initState();
+    setData();
+  }
+
+  void setData(){
+    final doc = firestore.collection('memberCoop').doc("${email}");
+    doc.get().then((DocumentSnapshot doc)
+    {
+      setState(() {
+        final data = doc.data() as Map<String,dynamic>;
+        point = data['point'];
+      });
+    },);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +59,7 @@ class profilePage extends StatelessWidget {
                     fit:BoxFit.fill)
             ),
             SizedBox(height: 10.0,),
-            Text('$name', textAlign: TextAlign.center,
+            Text('${widget.name}', textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
@@ -85,7 +109,7 @@ class profilePage extends StatelessWidget {
                       fontSize:15,
                       fontWeight: FontWeight.w500
                   )),
-              subtitle: Text('point 점',
+              subtitle: Text('$point 점',
                   style:TextStyle(color:Colors.black,
                       fontSize:18,
                       fontWeight: FontWeight.w500
@@ -99,7 +123,7 @@ class profilePage extends StatelessWidget {
                       fontSize:15,
                       fontWeight: FontWeight.w500
                   )),
-              subtitle: Text('$coop',
+              subtitle: Text('${widget.coop}',
                   style:TextStyle(color:Colors.black,
                       fontSize:18,
                       fontWeight: FontWeight.w500

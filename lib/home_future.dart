@@ -11,7 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
-/*
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -22,7 +22,7 @@ class Home extends StatefulWidget {
 class _Home extends State<Home> {
   final _auth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
-
+  final name = getData('member', 'name')!;
 
   int _selectedIndex = 0;
 
@@ -45,12 +45,7 @@ class _Home extends State<Home> {
       var code = email.replaceFirst('@ewhain.net', '');
 
       return
-      FutureBuilder(
-          future: firestore.collection('member').doc("${email}").get(), //중계하고 싶은 Stream을 넣는다.
-          builder: (context,future) =>
-            future.connectionState == ConnectionState.waiting
-          ?   Center(child: CircularProgressIndicator())
-          :   Scaffold(
+      Scaffold(
                   drawer: Drawer(
                     child: ListView(
                       padding: EdgeInsets.zero,
@@ -61,9 +56,8 @@ class _Home extends State<Home> {
                             backgroundImage: AssetImage('assets/profile1.jpg'),
                           ),
 
-
                            accountEmail: Text("$email"),
-                          accountName: Text(future.data();),
+                          accountName: Text('$name'),
 
 
                           decoration: BoxDecoration(
@@ -77,12 +71,7 @@ class _Home extends State<Home> {
                         ListTile(
                           title: Text('Profile'),
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => profilePage())
-                            );
-                          },
+                                                      },
                         ),
                         ListTile(
                           title: Text('1:1 문의'),
@@ -141,11 +130,8 @@ class _Home extends State<Home> {
                     child: _widgetOptions.elementAt(_selectedIndex),
                   ),
                   bottomNavigationBar: bottomNavigationBar,
-                ),
+                );
 
-
-
-      );
 }
 
 
@@ -189,4 +175,3 @@ class _Home extends State<Home> {
   }
 
 }
-*/
