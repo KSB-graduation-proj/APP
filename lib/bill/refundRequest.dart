@@ -1,14 +1,73 @@
 import 'dart:ui';
 
 import 'package:app_test/home.dart';
-import 'package:app_test/pages/myPage.dart';
+import 'package:app_test/firebase.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-const List<String> list = <String>['카카오뱅크 3333 **** **** 1234', '우리은행 2345 **** **** 1886', '삼성카드 9877 **** **** 1111'];
+List<String> list = [];
 const List<String> list1 = <String>['물품 인식 오류', '결제 카드 변경', '기타'];
-const List<String> list2 = <String>['참치 김밥', '코카콜라 제로', '아몬드맛 빼뺴로', '고구마 츄','없음'];
+ List<String> list2 = [];
+//주문번호, 결제번호, ispaid, 주문리스트 받아오기
 
-class refundRequest extends StatelessWidget {
+class refundRequest extends StatefulWidget {
+  final orderId;
+  final paymentId;
+  final payment;
+  final productList;
+
+  const refundRequest(this.orderId, this.paymentId, this.payment,this.productList );
+
+  @override
+  State<refundRequest> createState() => _refundRequest();
+}
+
+class _refundRequest extends State<refundRequest> {
+  List<String> product= [];
+  List<String> card=[];
+
+  @override
+  void initState() {
+    super.initState();
+    getCardData();
+  }
+
+  List<String>? keytoList(Map){
+    List<String> list =[];
+    for (String temp in Map){
+      list.add(temp);
+    }
+    return list;
+  }
+
+  void getCardData() {
+    final doc = firestore.collection('card').doc("${email}");
+    doc.get().then((DocumentSnapshot doc)
+    {
+      setState(() {
+        list.clear();
+        list2.clear();
+        final data = doc.data() as Map<String,dynamic>; // 모든 영수증 데이터
+        List<String>? card0 = keytoList(data.keys);
+        for(int i=0; i< card0!.length ;i++) {
+          var card1 = data[card0![i]];
+          var number1 = card1!['number'].toString();
+          var number2 = number1.replaceRange(5,14 ,'****-****');
+          var company1 = card1!['company'].toString();
+          var card2 = '$company1 $number2';
+          list.add(card2);
+        }
+        for(int i =0; i< widget.productList.length;i++){
+          product.add(widget.productList[i]);
+        }print(product.runtimeType);
+        list2.addAll(product);
+        print('$list, $list2');
+
+      });
+    },);
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +88,202 @@ class refundRequest extends StatelessWidget {
             //mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: 30,),
-              RefundForm(),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      SizedBox(width: 200,),
+                      Text('결제 번호: ${widget.paymentId}',
+                        style: TextStyle(color: Colors.black45,
+                          fontSize:13,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20,),
+                  Row(
+                    children: [
+                      SizedBox(width: 20,),
+                      const Text('결제 수단',
+                        style: TextStyle(color: Colors.black87,
+                          fontSize:15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1, // 20%
+                        child: Container(color: Colors.transparent),
+                      ),
+                      Expanded(
+                        flex: 14, // 60%
+                        child: DropdownButtonExample(),
+                      ),
+                      Expanded(
+                        flex: 1, // 20%
+                        child: Container(color: Colors.transparent),
+                      )
+                    ],
+                  ),
+
+                  SizedBox(height: 10,),
+                  Row(
+                    children: [
+                      SizedBox(width: 20,),
+                      const Text('환불 이유',
+                        style: TextStyle(color: Colors.black87,
+                          fontSize:15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1, // 20%
+                        child: Container(color: Colors.transparent),
+                      ),
+                      Expanded(
+                        flex: 14, // 60%
+                        child: DropdownButtonExample1(),
+                      ),
+                      Expanded(
+                        flex: 1, // 20%
+                        child: Container(color: Colors.transparent),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    children: [
+                      SizedBox(width: 20,),
+                      const Text('문제 물품',
+                        style: TextStyle(color: Colors.black87,
+                          fontSize:15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1, // 20%
+                        child: Container(color: Colors.transparent),
+                      ),
+                      Expanded(
+                        flex: 14, // 60%
+                        child: DropdownButtonExample2(),
+                      ),
+                      Expanded(
+                        flex: 1, // 20%
+                        child: Container(color: Colors.transparent),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    children: [
+                      SizedBox(width: 20,),
+                      const Text('문의 내용',
+                        style: TextStyle(color: Colors.black87,
+                          fontSize:15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20,),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1, // 20%
+                        child: Container(color: Colors.transparent),
+                      ),
+                      Expanded(
+                          flex: 14, // 60%
+                          child: TextField(
+                              maxLines: 6,
+                              minLines: 1,
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.fromLTRB(20.0, 50.0, 0.0, 50.0),
+                                labelText: 'Detail',
+                                hintText: '상세 문의 내용을 입력하세요. ',
+                                labelStyle: TextStyle(color: Colors.black, ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide(width: 0.5, color: Colors.black54),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide(width: 1, color: Colors.black54),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                ),
+                              ),
+                          )
+                      ),
+                      Expanded(
+                        flex: 1, // 20%
+                        child: Container(color: Colors.transparent),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 50,),
+
+                  FloatingActionButton.extended(
+                      label: const Text('                           제출                           ',
+                          style:TextStyle(color:Colors.white,
+                              fontSize:17,
+                              fontWeight: FontWeight.w800)),
+                      backgroundColor: Color(0xff2eb67d),
+                      elevation: 0.5,
+                      onPressed: () {
+
+                          showDialog<String>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('환불 요청'),
+                              content: const Text('이 주문의 환불을 신청하시겠습니까?'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'Cancel'),
+                                  child: const Text('아니요'),
+                                ),
+                                TextButton(
+                                  onPressed:() => showDialog<String>(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      content: const Text('환불 신청이 완료되었습니다.'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(builder: (context)=>Home()));
+                                            //Navigator.popUntil(context, (route) => route.isFirst);
+                                          },
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  child: const Text('예'),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                  ),
+                ],
+              )
               ]
         ),
       ),
@@ -37,222 +291,7 @@ class refundRequest extends StatelessWidget {
   }
 }
 
-class RefundForm extends StatefulWidget {
-  const RefundForm({super.key});
-  @override
-  RefundFormState createState() {
-    return RefundFormState();
-  }
-}
 
-class RefundFormState extends State<RefundForm>{
-  final refundKey = GlobalKey<FormState>();
-
-  Widget build(BuildContext){
-    return Form(
-      key: refundKey,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              SizedBox(width: 210,),
-              const Text('주문번호: eng221108174523lwi',
-                style: TextStyle(color: Colors.black45,
-                  fontSize:13,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 20,),
-          Row(
-            children: [
-              SizedBox(width: 20,),
-              const Text('결제 수단',
-                style: TextStyle(color: Colors.black87,
-                  fontSize:15,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 10,),
-          Row(
-            children: <Widget>[
-              Expanded(
-                flex: 1, // 20%
-                child: Container(color: Colors.transparent),
-              ),
-              Expanded(
-                flex: 14, // 60%
-                child: DropdownButtonExample(),
-              ),
-              Expanded(
-                flex: 1, // 20%
-                child: Container(color: Colors.transparent),
-              )
-            ],
-          ),
-
-          SizedBox(height: 10,),
-          Row(
-            children: [
-              SizedBox(width: 20,),
-              const Text('환불 이유',
-                style: TextStyle(color: Colors.black87,
-                  fontSize:15,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 10,),
-          Row(
-            children: <Widget>[
-              Expanded(
-                flex: 1, // 20%
-                child: Container(color: Colors.transparent),
-              ),
-              Expanded(
-                flex: 14, // 60%
-                child: DropdownButtonExample1(),
-              ),
-              Expanded(
-                flex: 1, // 20%
-                child: Container(color: Colors.transparent),
-              )
-            ],
-          ),
-          SizedBox(height: 10,),
-          Row(
-            children: [
-              SizedBox(width: 20,),
-              const Text('문제 물품',
-                style: TextStyle(color: Colors.black87,
-                  fontSize:15,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 10,),
-          Row(
-            children: <Widget>[
-              Expanded(
-                flex: 1, // 20%
-                child: Container(color: Colors.transparent),
-              ),
-              Expanded(
-                flex: 14, // 60%
-                child: DropdownButtonExample2(),
-              ),
-              Expanded(
-                flex: 1, // 20%
-                child: Container(color: Colors.transparent),
-              )
-            ],
-          ),
-          SizedBox(height: 10,),
-          Row(
-            children: [
-              SizedBox(width: 20,),
-              const Text('문의 내용',
-                style: TextStyle(color: Colors.black87,
-                  fontSize:15,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 20,),
-          Row(
-            children: <Widget>[
-              Expanded(
-                flex: 1, // 20%
-                child: Container(color: Colors.transparent),
-              ),
-              Expanded(
-                  flex: 14, // 60%
-                  child: TextFormField(
-                    maxLines: 6,
-                    minLines: 1,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(20.0, 50.0, 0.0, 50.0),
-                      labelText: 'Detail',
-                      hintText: '상세 문의 내용을 입력하세요. ',
-                      labelStyle: TextStyle(color: Colors.black, ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(width: 0.5, color: Colors.black54),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(width: 1, color: Colors.black54),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                    ),
-                      validator: (value)=> value==null||value.isEmpty?
-                      '문의 내용을 입력해주세요.':null
-                  )
-              ),
-              Expanded(
-                flex: 1, // 20%
-                child: Container(color: Colors.transparent),
-              )
-            ],
-          ),
-          SizedBox(height: 50,),
-
-          FloatingActionButton.extended(
-            label: const Text('                           제출                           ',
-                style:TextStyle(color:Colors.white,
-                    fontSize:17,
-                    fontWeight: FontWeight.w800)),
-            backgroundColor: Color(0xff2eb67d),
-            elevation: 0.5,
-            onPressed: () {
-              if(refundKey.currentState!.validate()){
-                showDialog<String>(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                    title: const Text('환불 요청'),
-                    content: const Text('이 주문의 환불을 신청하시겠습니까?'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, 'Cancel'),
-                        child: const Text('아니요'),
-                      ),
-                      TextButton(
-                        onPressed:() => showDialog<String>(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            content: const Text('환불 신청이 완료되었습니다.'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context)=>Home()));
-                                  //Navigator.popUntil(context, (route) => route.isFirst);
-                                },
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          ),
-                        ),
-                        child: const Text('예'),
-                      ),
-                    ],
-                  ),
-                );
-              }
-            }
-          ),
-        ],
-      )
-    );
-  }
-}
 
 class DropdownButtonExample extends StatefulWidget {
   const DropdownButtonExample({super.key});
@@ -371,3 +410,4 @@ class _DropdownButtonExampleState2 extends State<DropdownButtonExample2> {
     );
   }
 }
+

@@ -17,8 +17,10 @@ class _myPage extends State<myPage>{
   bool? coopMember;
   String? coop;
   List<dynamic> orderId=[];
+  List<dynamic> paymentId=[];
   List<dynamic> time=[];
   List<dynamic> isPaid=[];
+  List<dynamic> isRefunded=[];
   List<dynamic> totalPrice=[];
 
   @override
@@ -57,7 +59,9 @@ class _myPage extends State<myPage>{
       setState(() {
         final data = doc.data() as Map<String,dynamic>; // 모든 영수증 데이터
         List<String>? bill = keytoList(data.keys);
+        print('bill:$bill');
         for(int i=0; i< bill!.length ;i++) {
+          paymentId.add(bill![i]);
           var bill1 = data[bill![i]]; // 모든 결제번호 데이터
           var orderId1 =bill1!['orderId'].toString();
           orderId.add(orderId1);
@@ -71,10 +75,12 @@ class _myPage extends State<myPage>{
             isPaid2='결제완료';}
           else{isPaid2='결제실패';}
           isPaid.add(isPaid2);
+          var isRefunded1 = bill1['isRefunded'];
+          isRefunded.add(isRefunded1);
           var totalPrice1 = bill1['totalPrice'];
           var f = NumberFormat("#,###");
           totalPrice.add(f.format(totalPrice1));
-        }print('$orderId,$time,$isPaid,$totalPrice');
+        }print('$orderId,$paymentId, $time,$isPaid,$totalPrice');
       });
     },);
 
@@ -116,12 +122,14 @@ class _myPage extends State<myPage>{
               Column(
                 children: [
                   for (int i=0;i<orderId.length;i++)
-                    CustomListItemTwo(
-                      title: '${time[i]} 결제 영수증',
-                      orderno: '주문번호: ${orderId[i]}',
-                      payment: '${isPaid[i]}',
-                      price: '결제 금액 ₩ ${totalPrice[i]}',
-                    ),
+                    if(isRefunded[i]==false)
+                      CustomListItemTwo(
+                        paymentno: '${paymentId[i]}',
+                        title: '${time[i]} 결제 영수증',
+                        orderno: '${orderId[i]}',
+                        payment: '${isPaid[i]}',
+                        price: '${totalPrice[i]}',
+                      ),
 
                 ],
 
@@ -139,12 +147,14 @@ class _billDescription extends StatelessWidget {
   const _billDescription({
     required this.title,
     required this.orderno,
+    required this.paymentno,
     required this.payment,
     required this.price,
   });
 
   final String title;
   final String orderno;
+  final String paymentno;
   final String payment;
   final String price;
 
@@ -180,14 +190,27 @@ class _billDescription extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     const SizedBox(width: 20),
-                    Text(
-                      payment,
-                      style: const TextStyle(
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff2eb67d),
+                    if(payment=="결제실패")...[
+                      Text(
+                        payment,
+                        style: const TextStyle(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.pink,
+                        ),
                       ),
-                    ),
+                    ]
+                      else...[
+                      Text(
+                        payment,
+                        style: const TextStyle(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff2eb67d),
+                        ),
+                      ),
+                    ]
+
               ]),),
                 Expanded(
                   flex: 4,
@@ -214,7 +237,7 @@ class _billDescription extends StatelessWidget {
                     children: <Widget>[
                       const SizedBox(width: 20),
                       Text(
-                        orderno,
+                        '주문번호: $orderno',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
@@ -233,31 +256,65 @@ class _billDescription extends StatelessWidget {
                   children: <Widget>[
 
                     const SizedBox(width: 20),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Color(0xff2eb67d),
-                        padding: const EdgeInsets.fromLTRB(45.0, 7.0, 45.0, 7.0),
-                        textStyle: const TextStyle(fontSize: 15,
-                            fontWeight: FontWeight.bold),
+                    if(payment=="결제실패")...[
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.pink,
+                          padding: const EdgeInsets.fromLTRB(45.0, 7.0, 45.0, 7.0),
+                          textStyle: const TextStyle(fontSize: 15,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder:(context) => billPage(payment,paymentno,price,orderno)),//orderno전달해서 화면 이어지게
+                          );
+                        },
+                        child: const Text('상세보기'),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder:(context) => billScreen()),//orderno전달해서 화면 이어지게
-                        );
-                      },
-                      child: const Text('상세보기'),
-                    ),
-                    const SizedBox(width: 50),
-                    Text(
-                      price,
-                      style: const TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xff2eb67d),
+                    ]
+                    else...[
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Color(0xff2eb67d),
+                          padding: const EdgeInsets.fromLTRB(45.0, 7.0, 45.0, 7.0),
+                          textStyle: const TextStyle(fontSize: 15,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder:(context) => billPage(payment,paymentno,price,orderno)),//orderno전달해서 화면 이어지게
+                          );
+                        },
+                        child: const Text('상세보기'),
                       ),
-                    ),
+                    ]
+
+                    ,const SizedBox(width: 50),
+                    if(payment=="결제실패")...[
+                      Text(
+                        '미결제 금액 ₩ $price',
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.pink,
+                        ),
+                      ),
+                    ]
+                    else...[
+                      Text(
+                        '결제 금액 ₩ $price',
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xff2eb67d),
+                        ),
+                      ),
+                    ]
+
                  ],
                 ),
               ),
@@ -283,12 +340,14 @@ class CustomListItemTwo extends StatelessWidget {
     required this.title,
     required this.orderno,
     required this.payment,
+    required this.paymentno,
     required this.price,
   });
 
   final String title;
   final String orderno;
   final String payment;
+  final String paymentno;
   final String price;
 
   @override
@@ -308,6 +367,7 @@ class CustomListItemTwo extends StatelessWidget {
                   orderno: orderno,
                   payment: payment,
                   price: price,
+                  paymentno: paymentno,
 
                 ),
               ),

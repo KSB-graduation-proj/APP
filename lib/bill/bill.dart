@@ -1,14 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:app_test/bill/refundRequest.dart';
+import 'package:app_test/firebase.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
-class billScreen extends StatelessWidget {
+class billPage extends StatefulWidget {
+  final orderId;
+  final payment;
+  final paymentId;
+  final totalPrice;
+  const billPage(this.payment,this.paymentId, this.totalPrice,this.orderId, );
+
+  @override
+  State<billPage> createState() => _billPage();
+}
+
+class _billPage extends State<billPage> {
+  String? time;
+  String? cardCompany;
+  String? cardNumber;
+  int? point;
+  List<dynamic> product=[];
+  List<dynamic> price=[];
+  List<dynamic> count=[];
+
+  @override
+  void initState() {
+    super.initState();
+    getBillData();
+  }
+  List<String>? keytoList(Map){
+    List<String> list =[];
+    for (String temp in Map){
+      list.add(temp);
+    }
+    return list;
+  }
+  void getBillData() {
+
+    final doc = firestore.collection('payment').doc("${email}");
+    doc.get().then((DocumentSnapshot doc)
+    {
+      setState(() {
+        final data = doc.data() as Map<String,dynamic>;
+
+        var bill = data[widget.paymentId]; //특정 결제번호 데이터
+        var time1 = bill['time'].toDate().toUtc().add(Duration(hours:9));
+        var date1 = DateFormat('yyyy년 MM월 dd일 HH시 mm분 ss초').format(time1);
+        time = date1;
+        var cardC = bill['card']['company'];
+        cardCompany = cardC;
+        var cardN = bill['card']['number'];
+        cardNumber = cardN;
+        var pointt = bill['point'];
+        point = pointt;
+
+        var product0 = bill['buy'].keys;
+        List<String>? product1 = keytoList(product0!); //구매목록 (참치김밥, ,)
+        var product2 = bill!['buy'].values.toList(); //순서별 가격,개수
+        for (int i = 0 ; i<product2.length;i++){
+          product.add(product1![i]);
+          var priceList = product2![i]; //totalPrice: 머시기, count: 머시기 map
+            var f = NumberFormat.currency(locale: "ko_KR", symbol: "￦");
+            price.add(f.format(priceList['totalPrice']));
+            count.add(priceList['count']);
+        }
+        print('$product, $price, $count');
+
+
+      });
+    },);
+
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(widget.payment);
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
             color: Colors.black),
-        title: const Text('결제 영수증',
+        title:
+        Text('결제 영수증',
             style:TextStyle(color:Colors.black,
                 fontSize:20,
                 fontWeight: FontWeight.w800)),
@@ -41,126 +114,21 @@ class billScreen extends StatelessWidget {
                       ),
 
                       SizedBox(height: 20,),
-                      Row(
+                      Column(
                         children: [
-                          SizedBox(width: 40,),
-                          SizedBox(
-                            child: Text('참치 김밥',
-                                style:TextStyle(color:Colors.black45,
-                                  fontSize:18,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            width:180,
-                          ),
-                          SizedBox(
-                            child: Text('X '+'1',
-                                style:TextStyle(color:Colors.black45,
-                                  fontSize:18,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            width:80,
-                          ),
-                          SizedBox(
-                            child: Text('₩ '+'2,300',
-                                style:TextStyle(color:Colors.black45,
-                                  fontSize:18,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            width:80,
-                          ),
+                          for (int i=0;i<product.length;i++)
+                            //if(isRefunded[i]==false)
+                              _billDescription(
+                                product: '${product[i]}',
+                                count: '${count[i]}',
+                                price: '${price[i]}',
+                                payment:'${widget.payment}'
+                              ),
                         ],
+
                       ),
-                      SizedBox(height: 15,),
-                      Row(
-                        children: [
-                          SizedBox(width: 40,),
-                          SizedBox(
-                            child: Text('코카콜라 제로',
-                                style:TextStyle(color:Colors.black45,
-                                  fontSize:18,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            width:180,
-                          ),
-                          SizedBox(
-                            child: Text('X '+'1',
-                                style:TextStyle(color:Colors.black45,
-                                  fontSize:18,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            width:80,
-                          ),
-                          SizedBox(
-                            child: Text('₩ '+'2,300',
-                                style:TextStyle(color:Colors.black45,
-                                  fontSize:18,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            width:80,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 15,),
-                      Row(
-                        children: [
-                          SizedBox(width: 40,),
-                          SizedBox(
-                            child: Text('아몬드맛 빼빼로',
-                                style:TextStyle(color:Colors.black45,
-                                  fontSize:18,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            width:180,
-                          ),
-                          SizedBox(
-                            child: Text('X '+'2',
-                                style:TextStyle(color:Colors.black45,
-                                  fontSize:18,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            width:80,
-                          ),
-                          SizedBox(
-                            child: Text('₩ '+'2,600',
-                                style:TextStyle(color:Colors.black45,
-                                  fontSize:18,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            width:80,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 15,),
-                      Row(
-                        children: [
-                          SizedBox(width: 40,),
-                          SizedBox(
-                            child: Text('고구마 츄',
-                                style:TextStyle(color:Colors.black45,
-                                  fontSize:18,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            width:180,
-                          ),
-                          SizedBox(
-                            child: Text('X '+'1',
-                                style:TextStyle(color:Colors.black45,
-                                  fontSize:18,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            width:80,
-                          ),
-                          SizedBox(
-                            child: Text('₩ '+'3,500',
-                                style:TextStyle(color:Colors.black45,
-                                  fontSize:18,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            width:80,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20,),
+
+                      SizedBox(height: 5,),
                       Container(width: 500,
                           child: Divider(
                               indent: 10.0,
@@ -171,14 +139,25 @@ class billScreen extends StatelessWidget {
                           children:
                           [
                             SizedBox(width: 20,),
-                            SizedBox(
-                              width: 310,
-                              child: Text('적립 포인트',
-                                  style:TextStyle(color:Colors.black,
-                                      fontSize:20,
-                                      fontWeight: FontWeight.w800)),
-                            ),
-                            Text('470',
+                            if(widget.payment == "결제실패")...[
+                              SizedBox(
+                                width: 310,
+                                child: Text('적립 예정 포인트',
+                                    style:TextStyle(color:Colors.black,
+                                        fontSize:20,
+                                        fontWeight: FontWeight.w800)),
+                              ),
+                            ]
+                            else...[
+                              SizedBox(
+                                width: 310,
+                                child: Text('적립 포인트',
+                                    style:TextStyle(color:Colors.black,
+                                        fontSize:20,
+                                        fontWeight: FontWeight.w800)),
+                              ),
+                            ],
+                            Text('$point',
                                 style:TextStyle(color:Colors.black54,
                                     fontSize:20,
                                     fontWeight: FontWeight.w700)),
@@ -194,17 +173,31 @@ class billScreen extends StatelessWidget {
                           children:
                           [
                             SizedBox(width: 20,),
-                            SizedBox(
-                              width: 280,
-                              child: Text('총 금액',
-                                  style:TextStyle(color:Colors.black,
+                            if(widget.payment == "결제실패")...[
+                              SizedBox(
+                                width: 280,
+                                child: Text('총 미납 금액',
+                                    style:TextStyle(color:Colors.black,
+                                        fontSize:20,
+                                        fontWeight: FontWeight.w800)),
+                              ),
+                              Text('₩ ${widget.totalPrice}',
+                                  style:TextStyle(color:Colors.pink,
                                       fontSize:20,
-                                      fontWeight: FontWeight.w800)),
-                            ),
-                            Text('₩ '+'9,400',
-                                style:TextStyle(color:Color(0xff2eb67d),
-                                    fontSize:20,
-                                    fontWeight: FontWeight.w700)),
+                                      fontWeight: FontWeight.w700)),
+                            ]
+                            else...[
+                              SizedBox(
+                                width: 280,
+                                child: Text('총 금액',
+                                    style:TextStyle(color:Colors.black,
+                                        fontSize:20,
+                                        fontWeight: FontWeight.w800)),
+                              ),Text('₩ ${widget.totalPrice}',
+                                  style:TextStyle(color:Color(0xff2eb67d),
+                                      fontSize:20,
+                                      fontWeight: FontWeight.w700)),
+                            ]
                           ]),
                       SizedBox(height: 10,),
                       Container(width: 500,
@@ -232,7 +225,7 @@ class billScreen extends StatelessWidget {
                               color: Colors.black45,
                             ),
                             SizedBox(width: 20,),
-                            Text('카카오뱅크 1234 **** **** 5678',
+                            Text('$cardCompany $cardNumber',
                                 style:TextStyle(color:Colors.black45,
                                   fontSize:18,
                                 )),
@@ -251,7 +244,7 @@ class billScreen extends StatelessWidget {
                           children:
                           [
 
-                            Text('결제 일시: '+'2022 11 08 17:45:23',
+                            Text('결제 일시: $time',
                                 style:TextStyle(color:Colors.black45,
                                   fontSize:15,
                                 )),
@@ -263,43 +256,72 @@ class billScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children:
                           [
-
-                            Text('주문 번호: '+'eng221108174523lwi',
+                            Text('결제 번호: ${widget.paymentId}',
                                 style:TextStyle(color:Colors.black45,
                                   fontSize:15,
                                 )),
                             SizedBox(width: 20,),
                           ]),
                       SizedBox(height: 20,),
+                      if(widget.payment=="결제실패")...[
+                        Text('재결체 요청을 영수증 발급 후 60분 내에 하지 않을 시 '+'\n'
+                            '법적 조치 및 Coop-Go 회원정지가 시행될 수 있습니다.',
+                          style:TextStyle(color:Colors.pink,
+                              fontSize:15,
+                              fontWeight: FontWeight.w800
+                          ),textAlign: TextAlign.center,),
+                      ],
+                      SizedBox(height: 20,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget> [
-                          const SizedBox(width:20),
-                          FloatingActionButton.extended(
-                            label: const Text('    확인    ', style:TextStyle(color:Colors.white,
-                                fontSize:15,
-                                fontWeight: FontWeight.w800)),
-                            backgroundColor: Color(0xff2eb67d),
-                            elevation: 0.5,
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                          const SizedBox(width:50),
-                          FloatingActionButton.extended(
-                            label: const Text(' 환불 요청 ', style:TextStyle(color:Colors.white,
-                                fontSize:15,
-                                fontWeight: FontWeight.w800)),
-                            backgroundColor: Colors.pink,
-                            elevation: 0.5,
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context)
-                                => refundRequest(),),
-                              );
-                            },
-                          ),
+                          const SizedBox(width:15),
+                          if(widget.payment=="결제완료")...[
+                            FloatingActionButton.extended(
+                              label: const Text('    확인    ', style:TextStyle(color:Colors.white,
+                                  fontSize:15,
+                                  fontWeight: FontWeight.w800)),
+                              backgroundColor: Color(0xff2eb67d),
+                              elevation: 0.5,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            const SizedBox(width:50),
+                          ],
+                          if(widget.payment=="결제완료")...[
+                            FloatingActionButton.extended(
+                              label: const Text(' 환불 요청 ', style:TextStyle(color:Colors.white,
+                                  fontSize:15,
+                                  fontWeight: FontWeight.w800)),
+                              backgroundColor: Colors.pink,
+                              elevation: 0.5,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context)
+                                  => refundRequest(widget.orderId, widget.paymentId, widget.payment, product ),),
+                                );
+                              },
+                            ),
+                          ]
+                          else...[
+                            FloatingActionButton.extended(
+                              label: const Text('   재결제 요청   ', style:TextStyle(color:Colors.white,
+                                  fontSize:15,
+                                  fontWeight: FontWeight.w800)),
+                              backgroundColor: Colors.pink,
+                              elevation: 0.5,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context)
+                                  => refundRequest(widget.orderId, widget.paymentId, widget.payment, product ),),
+                                );
+                              },
+                            ),
+                          ]
+
                         ],
                       ),
                       SizedBox(height: 30,)
@@ -313,5 +335,59 @@ class billScreen extends StatelessWidget {
 
             ),
         );
+  }
+}
+
+class _billDescription extends StatelessWidget {
+  const _billDescription({
+    required this.product,
+    required this.count,
+    required this.price,
+    required this.payment,
+
+  });
+
+  final String product;
+  final String count;
+  final String price;
+  final String payment;
+
+
+  @override
+  Widget build(BuildContext context) {
+  return Container(
+    child: Column(
+      children: [
+       Row(
+    children: [
+      SizedBox(width: 40,),
+      SizedBox(
+        child: Text(product,
+            style:TextStyle(color:Colors.black45,
+              fontSize:18,
+              fontWeight: FontWeight.bold,
+            )),
+        width:180,
+      ),
+      SizedBox(
+        child: Text('X $count',
+            style:TextStyle(color:Colors.black45,
+              fontSize:18,
+              fontWeight: FontWeight.bold,
+            )),
+        width:80,
+      ),
+      SizedBox(
+        child: Text(price,
+            style:TextStyle(color:Colors.black45,
+              fontSize:18,
+              fontWeight: FontWeight.bold,
+            )),
+        width:80,
+      ),
+    ],
+  ),
+    SizedBox(height: 15,),
+  ]),);
   }
 }
