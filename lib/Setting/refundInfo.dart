@@ -1,9 +1,68 @@
 import 'package:app_test/Setting/refundBill.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:app_test/bill/bill.dart';
+import 'package:intl/intl.dart';
 
-class refundInfo extends StatelessWidget {
-  const refundInfo ({Key? key}) : super(key: key);
+import '../firebase.dart';
+
+class refundInfo extends StatefulWidget {
+  const refundInfo({Key? key}) : super(key: key);
+
+  @override
+  State<refundInfo> createState() => _refundInfo();
+
+}
+
+class _refundInfo extends State<refundInfo> {
+  List<dynamic> orderId=[];
+  List<dynamic> paymentId=[];
+  List<dynamic> time=[];
+  List<dynamic> isRefunded=[];
+  List<dynamic> totalPrice=[];
+  @override
+  void initState() {
+    super.initState();
+    getBillData();
+  }
+
+  List<String>? keytoList(Map){
+    List<String> list =[];
+    for (String temp in Map){
+      list.add(temp);
+    }
+    return list;
+  }
+
+  void getBillData() {
+    final doc = firestore.collection('payment').doc("${email}");
+    doc.get().then((DocumentSnapshot doc)
+
+    {
+      setState(() {
+        final data = doc.data() as Map<String,dynamic>; // 모든 영수증 데이터
+        List<String>? bill = keytoList(data.keys);
+        print('bill:$bill');
+        for(int i=0; i< bill!.length ;i++) {
+          paymentId.add(bill![i]);
+          var bill1 = data[bill![i]]; // 모든 결제번호 데이터
+
+          var orderId1 =bill1!['orderId'].toString();
+          orderId.add(orderId1);
+          var time1 = bill1['time'].toDate().toUtc().add(Duration(hours:9));
+          var date1 = DateFormat('yy/MM/dd HH:mm').format(time1);
+          print(time1); print(date1);
+          time.add(date1);
+
+          var isRefunded1 = bill1['isRefunded'];
+          isRefunded.add(isRefunded1);
+          var totalPrice1 = bill1['totalPrice'];
+          var f = NumberFormat("#,###");
+          totalPrice.add(f.format(totalPrice1));
+        }print('$orderId,$paymentId, $time,$totalPrice');
+      });
+    },);
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +85,24 @@ class refundInfo extends StatelessWidget {
             // mainAxisAlignment: MainAxisAlignment.center,
             children:[
               SizedBox(height: 20.0,),
-              const MyStatelessWidget(),
+              Column(
+                children: [
+                  for (int i=0;i<orderId.length;i++)...[
+                    if(isRefunded[i]==true)...[
+                      CustomListItemTwo(
+                        paymentno: '${paymentId[i]}',
+                        title: '${time[i]} 환불 영수증',
+                        orderno: '${orderId[i]}',
+                        payment: '환불완료',
+                        price: '${totalPrice[i]}',
+                      ),
+                    ]
+                  ]
+
+
+                ],
+              )
+
             ],
           ),
 
@@ -40,12 +116,14 @@ class _billDescription extends StatelessWidget {
   const _billDescription({
     required this.title,
     required this.orderno,
+    required this.paymentno,
     required this.payment,
     required this.price,
   });
 
   final String title;
   final String orderno;
+  final String paymentno;
   final String payment;
   final String price;
 
@@ -115,7 +193,7 @@ class _billDescription extends StatelessWidget {
                     children: <Widget>[
                       const SizedBox(width: 20),
                       Text(
-                        orderno,
+                        '주문번호: $orderno',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
@@ -145,14 +223,14 @@ class _billDescription extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder:(context) => refundbillScreen(),),
+                          MaterialPageRoute(builder:(context) => refundbillPage(paymentno,price,orderno),),
                         );
                       },
                       child: const Text('상세보기'),
                     ),
                     const SizedBox(width: 50),
                     Text(
-                      price,
+                      '환불 금액 ₩ $price',
                       style: const TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.w600,
@@ -184,12 +262,14 @@ class CustomListItemTwo extends StatelessWidget {
     required this.title,
     required this.orderno,
     required this.payment,
+    required this.paymentno,
     required this.price,
   });
 
   final String title;
   final String orderno;
   final String payment;
+  final String paymentno;
   final String price;
 
   @override
@@ -209,6 +289,7 @@ class CustomListItemTwo extends StatelessWidget {
                   orderno: orderno,
                   payment: payment,
                   price: price,
+                  paymentno: paymentno,
 
                 ),
               ),
@@ -219,7 +300,7 @@ class CustomListItemTwo extends StatelessWidget {
     );
   }
 }
-
+/*
 class MyStatelessWidget extends StatelessWidget {
   const MyStatelessWidget({super.key});
 
@@ -241,18 +322,6 @@ class MyStatelessWidget extends StatelessWidget {
                 payment: '환불완료',
                 price: '환불 금액 ₩ 14,800',
               ),
-              CustomListItemTwo(
-                title: '2022 11 10 환불 영수증',
-                orderno: '환불번호: ssg202211101045231lwi',
-                payment: '환불완료',
-                price: '환불 금액 ₩ 9,400',
-              ),
-              CustomListItemTwo(
-                  title: '2022 11 09 환불 영수증',
-                  orderno: '환불번호: pos20221109132519lwi',
-                  payment: '환불완료',
-                  price: '환불 금액 ₩ 5,200'
-              ),
             ],
 
           )
@@ -261,3 +330,4 @@ class MyStatelessWidget extends StatelessWidget {
     );
   }
 }
+*/

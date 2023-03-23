@@ -1,9 +1,56 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app_test/Setting/addPay.dart';
 
-class payPage extends StatelessWidget {
-  const payPage({Key? key}) : super(key: key);
+import '../firebase.dart';
 
+class payPage extends StatefulWidget {
+  const payPage({Key? key}) : super(key: key);
+  @override
+  State<payPage> createState() => _payPage();
+}
+
+class _payPage extends State<payPage> {
+  List<dynamic> cardId=[];
+  List<dynamic> company=[];
+  List<dynamic> number=[];
+  List<dynamic> isDefault=[];
+  @override
+  void initState() {
+    super.initState();
+    getCardData();
+  }
+  List<String>? keytoList(Map){
+    List<String> list =[];
+    for (String temp in Map){
+      list.add(temp);
+    }
+    return list;
+  }
+  void getCardData() {
+    final doc = firestore.collection('card').doc("${email}");
+    doc.get().then((DocumentSnapshot doc)
+    {
+      setState(() {
+        final data = doc.data() as Map<String,dynamic>; // 모든 영수증 데이터
+        List<String>? card = keytoList(data.keys);
+        print('bill:$card');
+        for(int i=0; i< card!.length ;i++) {
+          cardId.add(card![i]);
+          var card1 = data[card![i]]; // 모든 카드 데이터
+
+          var company1 =card1!['company'];
+          company.add(company1);
+          var number1 =card1!['number'];
+          number.add(number1);
+          var isDefault1 = card1['default'];
+          isDefault.add(isDefault1);
+
+        }print('$company,$number, $isDefault');
+      });
+    },);
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

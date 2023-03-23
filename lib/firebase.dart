@@ -1,12 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:intl/intl.dart';
 final _auth = FirebaseAuth.instance;
 final firestore = FirebaseFirestore.instance;
 
 var email = _auth.currentUser!.email.toString();
 var code = email.replaceFirst('@ewhain.net', '');
 
+setTime(){
+  DateTime date2 = new DateTime.now();
+  date2 = date2.toUtc().add(Duration(hours:9));
+  final settime = DateFormat('yyMMddHHmmss').format(date2);
+  return settime;
+}
 
 getData(collection, field)  async{
   final doc = await firestore.collection('$collection').doc("${email}");

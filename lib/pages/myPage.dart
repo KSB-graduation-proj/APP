@@ -63,6 +63,7 @@ class _myPage extends State<myPage>{
         for(int i=0; i< bill!.length ;i++) {
           paymentId.add(bill![i]);
           var bill1 = data[bill![i]]; // 모든 결제번호 데이터
+
           var orderId1 =bill1!['orderId'].toString();
           orderId.add(orderId1);
           var time1 = bill1['time'].toDate().toUtc().add(Duration(hours:9));

@@ -43,7 +43,6 @@ class _billPage extends State<billPage> {
     {
       setState(() {
         final data = doc.data() as Map<String,dynamic>;
-
         var bill = data[widget.paymentId]; //특정 결제번호 데이터
         var time1 = bill['time'].toDate().toUtc().add(Duration(hours:9));
         var date1 = DateFormat('yyyy년 MM월 dd일 HH시 mm분 ss초').format(time1);

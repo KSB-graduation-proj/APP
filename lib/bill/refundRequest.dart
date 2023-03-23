@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:intl/intl.dart';
 import 'package:app_test/home.dart';
 import 'package:app_test/firebase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,6 +9,10 @@ List<String> list = [];
 const List<String> list1 = <String>['물품 인식 오류', '결제 카드 변경', '기타'];
  List<String> list2 = [];
 //주문번호, 결제번호, ispaid, 주문리스트 받아오기
+String? payCard;
+String? reason;
+String? errorProduct;
+String? detail;
 
 class refundRequest extends StatefulWidget {
   final orderId;
@@ -26,10 +30,21 @@ class _refundRequest extends State<refundRequest> {
   List<String> product= [];
   List<String> card=[];
 
+  void print1(){
+    print('$payCard, $reason, $errorProduct, $detail');
+  }
+  void textClear(){
+    payCard=null;
+    reason=null;
+    errorProduct=null;
+    detail=null;
+  }
   @override
   void initState() {
     super.initState();
+    textClear();
     getCardData();
+
   }
 
   List<String>? keytoList(Map){
@@ -52,15 +67,16 @@ class _refundRequest extends State<refundRequest> {
         for(int i=0; i< card0!.length ;i++) {
           var card1 = data[card0![i]];
           var number1 = card1!['number'].toString();
-          var number2 = number1.replaceRange(5,14 ,'****-****');
+          //var number2 = number1.replaceRange(5,14 ,'****-****');
           var company1 = card1!['company'].toString();
-          var card2 = '$company1 $number2';
+          var card2 = '$company1 $number1';
           list.add(card2);
         }
         for(int i =0; i< widget.productList.length;i++){
           product.add(widget.productList[i]);
         }print(product.runtimeType);
         list2.addAll(product);
+        list2.add('없음');
         print('$list, $list2');
 
       });
@@ -71,7 +87,8 @@ class _refundRequest extends State<refundRequest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
+
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         iconTheme: IconThemeData(
             color: Colors.black),
@@ -83,9 +100,8 @@ class _refundRequest extends State<refundRequest> {
         elevation: 0.0,
         centerTitle: true,
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
-            //mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: 30,),
               Column(
@@ -209,27 +225,8 @@ class _refundRequest extends State<refundRequest> {
                       ),
                       Expanded(
                           flex: 14, // 60%
-                          child: TextField(
-                              maxLines: 6,
-                              minLines: 1,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.fromLTRB(20.0, 50.0, 0.0, 50.0),
-                                labelText: 'Detail',
-                                hintText: '상세 문의 내용을 입력하세요. ',
-                                labelStyle: TextStyle(color: Colors.black, ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                  borderSide: BorderSide(width: 0.5, color: Colors.black54),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                  borderSide: BorderSide(width: 1, color: Colors.black54),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                ),
-                              ),
-                          )
+                          child: detailTextField(label: "detail",onChangefunc: (newText){detail=newText;}),
+
                       ),
                       Expanded(
                         flex: 1, // 20%
@@ -247,8 +244,9 @@ class _refundRequest extends State<refundRequest> {
                       backgroundColor: Color(0xff2eb67d),
                       elevation: 0.5,
                       onPressed: () {
-
-                          showDialog<String>(
+                        print1();
+                        if(payCard!=null&&reason!=null&&errorProduct!=null&&detail!=null)
+                          {showDialog<String>(
                             context: context,
                             builder: (context) => AlertDialog(
                               title: const Text('환불 요청'),
@@ -259,27 +257,62 @@ class _refundRequest extends State<refundRequest> {
                                   child: const Text('아니요'),
                                 ),
                                 TextButton(
-                                  onPressed:() => showDialog<String>(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      content: const Text('환불 신청이 완료되었습니다.'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.push(context,
-                                                MaterialPageRoute(builder: (context)=>Home()));
-                                            //Navigator.popUntil(context, (route) => route.isFirst);
-                                          },
-                                          child: const Text('OK'),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
                                   child: const Text('예'),
-                                ),
+                                  onPressed:() {
+                                    final refundRequest = firestore.collection("refundRequest");
+                                    final settime = setTime();
+                                    final id = '${code}_${settime}';
+                                    var payCardList = payCard!.split(" ");
+                                    final cardCompany = payCardList[0];
+                                    final cardNumber = payCardList[1];
+                                    final data = <String, dynamic>
+                                      {
+                                        '${id}': {
+                                          'card': {
+                                            'company': cardCompany,
+                                            'number': cardNumber,
+                                          },
+                                          'detail': detail,
+                                          'errorProduct': errorProduct,
+                                          'orderId':widget.orderId,
+                                          'paymentId':widget.paymentId,
+                                          'reason':reason,
+
+                                        } };
+                                    refundRequest.doc(email).set(data, SetOptions(merge: true));
+                                    showDialog<String>(
+                                      context: context,
+                                      builder: (context) =>
+                                          AlertDialog(
+                                            content: const Text(
+                                                '환불 신청이 완료되었습니다.'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.push(context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              Home()));
+                                                  //Navigator.popUntil(context, (route) => route.isFirst);
+                                                },
+                                                child: const Text('OK'),
+                                              ),
+                                            ],
+                                          ),
+                                    );
+
+                                  }),
                               ],
                             ),
-                          );
+                          );}
+                        else{
+                          showDialog(context: context, builder: (context)=> AlertDialog(
+                            content: const Text ('모든 값의 선택 및 입력은 필수입니다.'),
+                            actions:<Widget>[
+                              TextButton(onPressed: (){Navigator.of(context).pop();}, child: const Text('예'))
+                            ]
+                          ));
+                        }
                         }
                   ),
                 ],
@@ -321,6 +354,7 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
         // This is called when the user selects an item.
         setState(() {
           dropdownValue = value!;
+          payCard = value;
         });
       },
       items: list.map<DropdownMenuItem<String>>((String value) {
@@ -360,6 +394,7 @@ class _DropdownButtonExampleState1 extends State<DropdownButtonExample1> {
         // This is called when the user selects an item.
         setState(() {
           dropdownValue = value!;
+          reason = value!;
         });
       },
       items: list1.map<DropdownMenuItem<String>>((String value) {
@@ -395,10 +430,11 @@ class _DropdownButtonExampleState2 extends State<DropdownButtonExample2> {
       underline: Container(
         color: Colors.transparent,
       ),
-      onChanged: (String? value) {
+      onChanged: (dynamic value) {
         // This is called when the user selects an item.
         setState(() {
-          dropdownValue = value!;
+          dropdownValue = value;
+          errorProduct = value;
         });
       },
       items: list2.map<DropdownMenuItem<String>>((String value) {
@@ -410,4 +446,50 @@ class _DropdownButtonExampleState2 extends State<DropdownButtonExample2> {
     );
   }
 }
+
+class detailTextField extends StatelessWidget{
+
+  String label;
+  void Function(String text) onChangefunc;
+
+  detailTextField({
+    required this.label,
+    required this.onChangefunc,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Container(
+
+      child:TextField(
+        onChanged: (newText){
+          onChangefunc(newText);
+        },
+        maxLines: 6,
+        minLines: 1,
+        decoration: InputDecoration(
+        contentPadding: EdgeInsets.fromLTRB(20.0, 50.0, 0.0, 50.0),
+
+        hintText: '상세 문의 내용을 입력하세요. ',
+        labelStyle: TextStyle(color: Colors.black, ),
+        focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        borderSide: BorderSide(width: 0.5, color: Colors.black54),
+        ),
+        enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        borderSide: BorderSide(width: 1, color: Colors.black54),
+        ),
+        border: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        ),
+      ),
+    ));
+
+}
+}
+
+
 
