@@ -1,6 +1,7 @@
 import 'package:app_test/firebase_options.dart';
 import 'package:app_test/login/signup.dart';
 import 'package:app_test/home.dart';
+import 'package:app_test/qrscan/qrScan.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutterfire_ui/auth.dart';
@@ -48,7 +49,14 @@ class _loginPageState extends State<loginPage> {
               ],
             );
           } else {
-            return Home();
+            User? user =FirebaseAuth.instance.currentUser;
+            if(user?.email=="admin@ewhain.net"){
+              return QrScan();
+            }
+            else{
+              return Home();
+            }
+
           }
         }
     );

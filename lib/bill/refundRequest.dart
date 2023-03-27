@@ -108,7 +108,7 @@ class _refundRequest extends State<refundRequest> {
                 children: [
                   Row(
                     children: [
-                      SizedBox(width: 200,),
+                      SizedBox(width: 190,),
                       Text('결제 번호: ${widget.paymentId}',
                         style: TextStyle(color: Colors.black45,
                           fontSize:13,
@@ -237,7 +237,7 @@ class _refundRequest extends State<refundRequest> {
                   SizedBox(height: 50,),
 
                   FloatingActionButton.extended(
-                      label: const Text('                           제출                           ',
+                      label: const Text('                         제출                         ',
                           style:TextStyle(color:Colors.white,
                               fontSize:17,
                               fontWeight: FontWeight.w800)),

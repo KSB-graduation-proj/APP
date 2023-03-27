@@ -63,7 +63,6 @@ class _myPage extends State<myPage>{
         for(int i=0; i< bill!.length ;i++) {
           paymentId.add(bill![i]);
           var bill1 = data[bill![i]]; // 모든 결제번호 데이터
-
           var orderId1 =bill1!['orderId'].toString();
           orderId.add(orderId1);
           var time1 = bill1['time'].toDate().toUtc().add(Duration(hours:9));
@@ -76,6 +75,7 @@ class _myPage extends State<myPage>{
             isPaid2='결제완료';}
           else{isPaid2='결제실패';}
           isPaid.add(isPaid2);
+
           var isRefunded1 = bill1['isRefunded'];
           isRefunded.add(isRefunded1);
           var totalPrice1 = bill1['totalPrice'];
@@ -122,7 +122,7 @@ class _myPage extends State<myPage>{
               ,SizedBox(height: 10.0,),
               Column(
                 children: [
-                  for (int i=0;i<orderId.length;i++)
+                  for (int i=0;i<orderId.length;i++)...[
                     if(isRefunded[i]==false)
                       CustomListItemTwo(
                         paymentno: '${paymentId[i]}',
@@ -131,6 +131,9 @@ class _myPage extends State<myPage>{
                         payment: '${isPaid[i]}',
                         price: '${totalPrice[i]}',
                       ),
+                  ]
+
+
 
                 ],
 

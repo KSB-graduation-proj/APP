@@ -1,11 +1,12 @@
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-void main() => runApp(const MaterialApp(home: QrScan()));
+//void main() => runApp(const MaterialApp(home: QrScan()));
 
 class QrScan extends StatelessWidget {
   const QrScan({Key? key}) : super(key: key);
@@ -30,7 +31,12 @@ class QrScan extends StatelessWidget {
                 },
                 color: Color(0xff2eb67d),
               );
-          })
+          }),
+          actions: [IconButton(onPressed: () {
+        FirebaseAuth.instance.signOut();
+        }, icon: Icon(Icons.logout),
+            color: Color(0xff2eb67d),)
+          ],
       ),
       body: Center(
         child:
@@ -52,6 +58,9 @@ class _QRViewExampleState extends State<QRViewExample> {
   var date;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  final ValueNotifier<String?> _scanDataNotifier = ValueNotifier<String?>('');
+  String? res='';
+  String? preScanData='';
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
@@ -81,7 +90,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                   if (result != null || date != null)
                     Text('학번: ${result!.code}' '\n'
                             '현재 시간: ${date!}'
-                           , style: TextStyle(color: Colors.black54, fontSize: 10,),textAlign: TextAlign.center,
+                      ,style: TextStyle(color: Colors.black54, fontSize: 10,),textAlign: TextAlign.center,
                       )
 
                   else
@@ -149,18 +158,31 @@ class _QRViewExampleState extends State<QRViewExample> {
   void _onQRViewCreated(QRViewController controller) {
     setState(() {
       this.controller = controller;
-    });
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
+      controller.scannedDataStream.listen((scanData) {
+        res=scanData.code;
+        print('$res, $preScanData');
+        if(res != preScanData){
+          preScanData=res;
+          _scanDataNotifier.value = res;
+          setQR();
+        }
+        //print('res: $res');
         DateTime date2 = new DateTime.now();
         date2 = date2.toUtc().add(Duration(hours:9));
         date = DateFormat('yyyy-MM-dd hh:mm:ss').format(date2);
-
-
-        //이 결과를 서버로 전송해야됨
-      });
+        //print('date: $date');
+        setState(() {
+          result = scanData;
+        });
     });
+    });
+  }
+
+  void setQR(){
+    print('change: ${_scanDataNotifier.value}');
+    print('qr res: $res');
+    print('qr date: $date');
+
   }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
@@ -176,5 +198,6 @@ class _QRViewExampleState extends State<QRViewExample> {
   void dispose() {
     controller?.dispose();
     super.dispose();
+    print("dispose");
   }
 }
