@@ -21,6 +21,7 @@ class _refundbillPage extends State<refundbillPage> {
   List<dynamic> product=[];
   List<dynamic> price=[];
   List<dynamic> count=[];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -45,6 +46,7 @@ class _refundbillPage extends State<refundbillPage> {
         var time1 = bill['time'].toDate().toUtc().add(Duration(hours:9));
         var date1 = DateFormat('yyyy년 MM월 dd일 HH시 mm분 ss초').format(time1);
         time = date1;
+
         var cardC = bill['card']['company'];
         cardCompany = cardC;
         var cardN = bill['card']['number'];
@@ -62,6 +64,7 @@ class _refundbillPage extends State<refundbillPage> {
           price.add(f.format(priceList['totalPrice']));
           count.add(priceList['count']);
         }
+        isLoading = false;
         print('$product, $price, $count');
 
 
@@ -84,7 +87,11 @@ class _refundbillPage extends State<refundbillPage> {
         centerTitle: true,
       ),
 
-      body: Center(
+      body: isLoading
+          ? Center(
+        child: CircularProgressIndicator(),
+      )
+          : Center(
         child: Container(
           child: SingleChildScrollView(
             child: Column(

@@ -1,10 +1,13 @@
 import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+
+import '../firebase.dart';
 
 //void main() => runApp(const MaterialApp(home: QrScan()));
 
@@ -61,6 +64,8 @@ class _QRViewExampleState extends State<QRViewExample> {
   final ValueNotifier<String?> _scanDataNotifier = ValueNotifier<String?>('');
   String? res='';
   String? preScanData='';
+  String? dateDataString='';
+  int? dateData;
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
@@ -161,18 +166,21 @@ class _QRViewExampleState extends State<QRViewExample> {
       controller.scannedDataStream.listen((scanData) {
         res=scanData.code;
         print('$res, $preScanData');
+
         if(res != preScanData){
           preScanData=res;
           _scanDataNotifier.value = res;
           setQR();
         }
-        //print('res: $res');
-        DateTime date2 = new DateTime.now();
-        date2 = date2.toUtc().add(Duration(hours:9));
-        date = DateFormat('yyyy-MM-dd hh:mm:ss').format(date2);
-        //print('date: $date');
+
         setState(() {
           result = scanData;
+          DateTime date2 = new DateTime.now();
+          date2 = date2.toUtc().add(Duration(hours:9));
+          date = DateFormat('yyyy-MM-dd HH:mm:ss').format(date2);
+          dateDataString = DateFormat('yyMMddHHmmss').format(date2);
+          dateData = int.parse(dateDataString!);
+
         });
     });
     });
@@ -181,8 +189,19 @@ class _QRViewExampleState extends State<QRViewExample> {
   void setQR(){
     print('change: ${_scanDataNotifier.value}');
     print('qr res: $res');
-    print('qr date: $date');
-
+    print('qr dateD: $dateData');
+    final qr = firestore.collection("qr");
+    final id = res;
+    final time = dateDataString!.substring(0,6);
+    final qrTime = dateData;
+    final data = <String, dynamic>
+    {
+      '${qrTime}':{
+        'id': id
+      }
+    };
+    qr.doc(time).set(data, SetOptions(merge: true));
+    print('setData');
   }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {

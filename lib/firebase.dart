@@ -14,6 +14,34 @@ setTime(){
   return settime;
 }
 
+storeData()
+{ /*
+  final refundRequest = firestore.collection("refundRequest");
+  final settime = setTime();
+  final id = '${code}_${settime}';
+  var payCardList = payCard!.split(" ");
+  final cardCompany = payCardList[0];
+  final cardNumber = payCardList[1];
+  final data = <String, dynamic>
+  {
+    '${id}': {
+      'card': {
+        'company': cardCompany,
+        'number': cardNumber,
+      },
+      'detail': detail,
+      'errorProduct': errorProduct,
+      'orderId':widget.orderId,
+      'paymentId':widget.paymentId,
+      'reason':reason,
+
+    } };
+  refundRequest.doc(email).set(data, SetOptions(merge: true));
+  */
+}
+
+
+
 getData(collection, field)  async{
   final doc = await firestore.collection('$collection').doc("${email}");
   doc.get().then(

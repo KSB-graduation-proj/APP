@@ -23,6 +23,7 @@ class _billPage extends State<billPage> {
   List<dynamic> product=[];
   List<dynamic> price=[];
   List<dynamic> count=[];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -47,15 +48,13 @@ class _billPage extends State<billPage> {
         var time1 = bill['time']?.toDate().toUtc().add(Duration(hours:9));
         var date1 = DateFormat('yyyy년 MM월 dd일 HH시 mm분 ss초').format(time1);
         time = date1;
-        var card = bill['card'];
-        print(card);
-        var cardC = bill?['card']?['company'];
+        var cardC = bill['card']?['company'];
         cardCompany = cardC;
-        var cardN = bill?['card']?['number'];
+        var cardN = bill['card']?['number'];
         cardNumber = cardN;
         var pointt = bill?['point'];
         point = pointt;
-
+        print('card: ${bill.containsKey('card')}');
         var product0 = bill['buy'].keys;
         List<String>? product1 = keytoList(product0!); //구매목록 (참치김밥, ,)
         var product2 = bill!['buy'].values.toList(); //순서별 가격,개수
@@ -63,9 +62,10 @@ class _billPage extends State<billPage> {
           product.add(product1?[i]);
           var priceList = product2[i]; //totalPrice: 머시기, count: 머시기 map
             var f = NumberFormat.currency(locale: "ko_KR", symbol: "￦");
-            price.add(f.format(priceList?['totalPrice']));
-            count.add(priceList?['count']);
+            price.add(f.format(priceList['totalPrice']));
+            count.add(priceList['count']);
         }
+        isLoading = false;
         print('$product, $price, $count $cardCompany $cardNumber');
 
       },
@@ -94,7 +94,11 @@ class _billPage extends State<billPage> {
                 centerTitle: true,
         ),
 
-      body: Center(
+      body: isLoading
+          ? Center(
+        child: CircularProgressIndicator(),
+      )
+          : Center(
         child: Container(
           child: SingleChildScrollView(
             child: Column(

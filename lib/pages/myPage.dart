@@ -22,6 +22,7 @@ class _myPage extends State<myPage>{
   List<dynamic> isPaid=[];
   List<dynamic> isRefunded=[];
   List<dynamic> totalPrice=[];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -41,6 +42,7 @@ class _myPage extends State<myPage>{
         if(coopMember==true){
           coop='조합원';}
         else{coop='비조합원';}
+        isLoading = false;
       });
     },);
   }
@@ -92,7 +94,11 @@ class _myPage extends State<myPage>{
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: SingleChildScrollView(
+        body: isLoading
+            ? Center(
+          child: CircularProgressIndicator(),
+        )
+            : SingleChildScrollView(
           child: Column(
            // mainAxisSize: MainAxisSize.max,
            // mainAxisAlignment: MainAxisAlignment.center,
