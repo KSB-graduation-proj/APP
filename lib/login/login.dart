@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutterfire_ui/auth.dart';
 
+import '../temp.dart';
+
 class loginPage extends StatefulWidget {
   const loginPage({Key? key}) : super(key: key);
   @override

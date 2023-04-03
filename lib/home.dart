@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:app_test/firebase.dart';
 import 'package:app_test/pages/point.dart';
+import 'package:app_test/temp.dart';
 import 'package:flutter/material.dart';
 import 'package:app_test/pages/mainPage.dart';
 import 'package:app_test/pages/myPage.dart';
@@ -22,11 +25,12 @@ class _Home extends State<Home> {
 
   int _selectedIndex = 0;
 
-  static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   String? name;
   bool? coopMember;
   String? coop;
+
+  StreamSubscription<QuerySnapshot>? _subscription;
 
   static const List<Widget> _widgetOptions = <Widget>[
     mainPage(),
@@ -38,7 +42,21 @@ class _Home extends State<Home> {
   void initState() {
     super.initState();
     setData();
+    lastDocumentId = null;
+    if (_subscription == null) {
+      print('실행실행');
+      _subscription = subscribeToQrCollection();
+    }
+
+    print('init! 그리고 이프아님');
     //setCoop();
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    _subscription=null;
+    super.dispose();
   }
 
   void _onItemTapped(int index) {

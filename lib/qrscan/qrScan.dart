@@ -193,14 +193,14 @@ class _QRViewExampleState extends State<QRViewExample> {
     final qr = firestore.collection("qr");
     final id = res;
     final time = dateDataString!.substring(0,6);
-    final qrTime = dateData;
+    final qrTime = dateData.toString();
+    final qrID = "${id}_${qrTime}";
+    print(qrID);
     final data = <String, dynamic>
     {
-      '${qrTime}':{
-        'id': id
-      }
+      'id': id
     };
-    qr.doc(time).set(data, SetOptions(merge: true));
+    qr.doc(qrID).set(data);
     print('setData');
   }
 
