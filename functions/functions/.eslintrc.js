@@ -11,6 +11,7 @@ module.exports = {
     "google",
   ],
   rules: {
+    "require-jsdoc": "off",
     "linebreak-style": 0,
     "no-restricted-globals": ["error", "name", "length"],
     "prefer-arrow-callback": "error",
