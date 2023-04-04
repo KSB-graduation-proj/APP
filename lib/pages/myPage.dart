@@ -22,6 +22,7 @@ class _myPage extends State<myPage>{
   List<dynamic> isPaid=[];
   List<dynamic> isRefunded=[];
   List<dynamic> totalPrice=[];
+
   bool isLoading = true;
 
   @override
@@ -42,7 +43,7 @@ class _myPage extends State<myPage>{
         if(coopMember==true){
           coop='조합원';}
         else{coop='비조합원';}
-        isLoading = false;
+
       });
     },);
   }
@@ -67,10 +68,12 @@ class _myPage extends State<myPage>{
           var bill1 = data[bill![i]]; // 모든 결제번호 데이터
           var orderId1 =bill1!['orderId'].toString();
           orderId.add(orderId1);
-          var time1 = bill1['time'].toDate().toUtc().add(Duration(hours:9));
-          var date1 = DateFormat('yy/MM/dd HH:mm').format(time1);
-          print(time1); print(date1);
-          time.add(date1);
+          String date1 = orderId1.substring(8);
+          String formatDate =
+              "${date1.substring(0, 2)}/${date1.substring(2, 4)}/${date1.substring(4, 6)} ${date1.substring(6, 8)}:${date1.substring(8, 10)}:${date1.substring(10)}";
+          print(formatDate);
+
+          time.add(formatDate);
           var isPaid1 = bill1['isPaid'];
           var isPaid2;
           if(isPaid1==true){
@@ -83,6 +86,7 @@ class _myPage extends State<myPage>{
           var totalPrice1 = bill1['totalPrice'];
           var f = NumberFormat("#,###");
           totalPrice.add(f.format(totalPrice1));
+          isLoading = false;
         }print('$orderId,$paymentId, $time,$isPaid,$totalPrice');
       });
     },);
@@ -128,7 +132,7 @@ class _myPage extends State<myPage>{
               ,SizedBox(height: 10.0,),
               Column(
                 children: [
-                  for (int i=0;i<orderId.length;i++)...[
+                  for (int i=orderId.length-1;i>=0;i--)...[
                     if(isRefunded[i]==false)
                       CustomListItemTwo(
                         paymentno: '${paymentId[i]}',

@@ -53,43 +53,7 @@ getData(collection, field)  async{
     },
   );
 }
-order() async{
-  print("order 실행");
-  List id=[];
-  Map eachOrderList={};
-  Map qrData={};
-  //인식결과
-  final doc = await firestore.collection('detectionResult');
 
-  final qrdoc = await firestore.collection('qr');
-  qrdoc.get().then(
-          (querySnapshot){
-        for (var docSnapshot in querySnapshot.docs) {
-          id.add(docSnapshot.data()['id']);
-          qrData['${docSnapshot.id}']='${docSnapshot.data()['id']}';
-          print('${docSnapshot.id} => ${docSnapshot.data()}');
-
-          doc.get().then(
-                (querySnapshot) {
-              print("Successfully completed");
-              for (var docSnapshot1 in querySnapshot.docs) {
-                int dtres = int.parse(docSnapshot1.id);
-                int qrres = int.parse(docSnapshot.id);
-                if(qrres == dtres){
-                  eachOrderList['${docSnapshot1.id}']='${docSnapshot1.data()}';
-                }
-                print('${docSnapshot1.id} => ${docSnapshot1.data()}');
-              }
-              print('detect : $eachOrderList');
-            },
-            onError: (e) => print("Error completing: $e"),
-          );
-
-        }
-      }
-  );
-  //for문으로 qrdata값과 일치, 1~2초 차이인 value값을 데베에 저장
-}
 /*
 void getBillData() {
   final doc = firestore.collection('payment').doc("${email}");

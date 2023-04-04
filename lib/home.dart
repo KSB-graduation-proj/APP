@@ -42,22 +42,8 @@ class _Home extends State<Home> {
   void initState() {
     super.initState();
     setData();
-    lastDocumentId = null;
-    if (_subscription == null) {
-      print('실행실행');
-      _subscription = subscribeToQrCollection();
-    }
-
-    print('init! 그리고 이프아님');
-    //setCoop();
   }
 
-  @override
-  void dispose() {
-    _subscription?.cancel();
-    _subscription=null;
-    super.dispose();
-  }
 
   void _onItemTapped(int index) {
     setState(() {

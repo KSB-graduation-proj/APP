@@ -43,9 +43,11 @@ class _refundbillPage extends State<refundbillPage> {
       setState(() {
         final data = doc.data() as Map<String,dynamic>;
         var bill = data[widget.paymentId]; //특정 결제번호 데이터
-        var time1 = bill['time'].toDate().toUtc().add(Duration(hours:9));
-        var date1 = DateFormat('yyyy년 MM월 dd일 HH시 mm분 ss초').format(time1);
-        time = date1;
+        String date1 = widget.orderId.substring(8);
+        String formatDate =
+            "20${date1.substring(0, 2)}년 ${date1.substring(2, 4)}월 ${date1.substring(4, 6)}일 ${date1.substring(6, 8)}시 ${date1.substring(8, 10)}분 ${date1.substring(10)}초";
+        print(formatDate);
+        time = formatDate;
 
         var cardC = bill['card']['company'];
         cardCompany = cardC;

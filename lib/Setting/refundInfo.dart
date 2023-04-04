@@ -19,10 +19,12 @@ class _refundInfo extends State<refundInfo> {
   List<dynamic> time=[];
   List<dynamic> isRefunded=[];
   List<dynamic> totalPrice=[];
+
   @override
   void initState() {
     super.initState();
     getBillData();
+
   }
 
   List<String>? keytoList(Map){
@@ -48,11 +50,11 @@ class _refundInfo extends State<refundInfo> {
 
           var orderId1 =bill1!['orderId'].toString();
           orderId.add(orderId1);
-          var time1 = bill1['time'].toDate().toUtc().add(Duration(hours:9));
-          var date1 = DateFormat('yy/MM/dd HH:mm').format(time1);
-          print(time1); print(date1);
-          time.add(date1);
-
+          String date1 = orderId1.substring(8);
+          String formatDate =
+              "${date1.substring(0, 2)}/${date1.substring(2, 4)}/${date1.substring(4, 6)} ${date1.substring(6, 8)}:${date1.substring(8, 10)}:${date1.substring(10)}";
+          print(formatDate);
+          time.add(formatDate);
           var isRefunded1 = bill1['isRefunded'];
           isRefunded.add(isRefunded1);
           var totalPrice1 = bill1['totalPrice'];
