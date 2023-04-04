@@ -27,6 +27,33 @@ exports.paymentFunction = functions.firestore
         console.log(orderID, goods,
             email, totalSum, selectedCard, cardBalance,
             cardCompany, cardNumber);
+        // 카드 잔액 확인
+        let paid = false;
+        let newCardBalance = cardBalance;
+        if (cardBalance >= totalSum) {
+          paid = true;
+          newCardBalance = cardBalance - totalSum;
+        }
+        console.log(`paid: ${paid}, newCardBalance: ${newCardBalance}`);
+        const cardRef = admin.firestore().collection("card").doc(email);
+        await cardRef.update({
+          [`${selectedCard}.balance`]: newCardBalance});
+        // 결제정보 저장
+        const paymentID = "p"+orderID;
+        const point = totalSum * 0.05;
+        const PaymentDoc = admin.firestore().collection("payment").doc(email);
+        await PaymentDoc.update({
+          [paymentID]: {
+            isPaid: paid,
+            isRefunded: false,
+            buy: goods,
+            card: {
+              number: cardNumber,
+              company: cardCompany},
+            orderId: orderID,
+            point: point,
+            totalPrice: totalSum},
+        });
       } else {
         console.log(`Card document with email ${email} does not exist`);
       }
