@@ -134,6 +134,9 @@ class addpayFormState extends State<addpayForm> {
                 maxLines: 1,
                 minLines: 1,
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: 20.0, horizontal: 10.0),
+                  border: InputBorder.none,
                   hintText: '카드사',
                   labelStyle: TextStyle(color: Color(0xff2eb67d), ),
                 ),
@@ -154,7 +157,11 @@ class addpayFormState extends State<addpayForm> {
                 keyboardType: TextInputType.number,
                 maxLines: 1,
                 minLines: 1,
+
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: 20.0, horizontal: 10.0),
+                  border: InputBorder.none,
                   hintText: '0000-0000-0000-0000',
                   labelStyle: TextStyle(color: Color(0xff2eb67d), ),
                 ),
@@ -176,6 +183,9 @@ class addpayFormState extends State<addpayForm> {
                 maxLines: 1,
                 minLines: 1,
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: 20.0, horizontal: 10.0),
+                  border: InputBorder.none,
                   hintText: 'YYYY / MM',
                   labelStyle: TextStyle(color: Color(0xff2eb67d), ),
                 ),
@@ -197,6 +207,9 @@ class addpayFormState extends State<addpayForm> {
                 maxLines: 1,
                 minLines: 1,
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: 20.0, horizontal: 10.0),
+                  border: InputBorder.none,
                   hintText: '카드 뒷면 숫자 3자리',
                   labelStyle: TextStyle(color: Color(0xff2eb67d), ),
                 ),
@@ -214,10 +227,14 @@ class addpayFormState extends State<addpayForm> {
             SizedBox(width: 95,),
             SizedBox(width:200,
               child:TextFormField(
+                obscureText: true,
                 keyboardType: TextInputType.number,
                 maxLines: 1,
                 minLines: 1,
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: 20.0, horizontal: 10.0),
+                 // border: InputBorder.none,
                   hintText: '비밀번호의 앞 2자리',
                   labelStyle: TextStyle(color: Color(0xff2eb67d), ),
                 ),validator: (value)=> value==null||value.isEmpty?

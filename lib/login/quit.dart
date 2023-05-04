@@ -86,8 +86,10 @@ class LoginFormState extends State<LoginForm> {
                   cursorColor: Color(0xff2eb67d),
                   decoration: InputDecoration(
                       hintStyle: TextStyle(fontSize: 17,color:  Color(0xff2eb67d)),
-                      contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 0.0),
-                      hintText: '비밀번호를 입력하세요',
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: 10.0),
+                    border: InputBorder.none,
+                    hintText: '비밀번호를 입력하세요',
                   ),
                   validator: (value)=> value==null||value.isEmpty?
                   '비밀번호를 입력하세요':null,
