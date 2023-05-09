@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 List<String> list = [];
-const List<String> list1 = <String>['물품 인식 오류', '결제 카드 변경', '기타'];
+const List<String> list1 = <String>['물품 인식 오류', '기타'];
  List<String> list2 = [];
 //주문번호, 결제번호, ispaid, 주문리스트 받아오기
 String? payCard;

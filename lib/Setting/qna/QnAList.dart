@@ -1,8 +1,67 @@
 import 'package:app_test/Setting/qna/qnaDetail.dart';
+import 'package:app_test/firebase.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class qnalistPage extends StatelessWidget {
+class qnalistPage extends StatefulWidget {
   const qnalistPage({Key? key}) : super(key: key);
+  @override
+  State<qnalistPage> createState() => _qnalistPage();
+}
+
+class _qnalistPage extends State<qnalistPage> {
+
+  List<dynamic> orderId=[];
+  List<dynamic> qnaId=[];
+  List<dynamic> title=[];
+  List<dynamic> time=[];
+  List<dynamic> category=[];
+  List<dynamic> detail=[];
+
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getQnaData();
+  }
+
+  List<String>? keytoList(Map){
+    List<String> list =[];
+    for (String temp in Map){
+      list.add(temp);
+    }
+    return list;
+  }
+
+  void getQnaData(){
+    final doc = firestore.collection('qna').doc("${email}");
+    doc.get().then((DocumentSnapshot doc) {
+      setState(() {
+        final data = doc.data() as Map<String,dynamic>; // 모든 영수증 데이터
+        List<String>? qna = keytoList(data.keys);
+        print('qna:$qna');
+        for(int i = 0; i<qna!.length;i++){
+          qnaId.add(qna![i]);
+          var qna1 = data[qna![i]]; // 모든 결제번호 데이터
+          var orderId1 =qna1!['orderId'].toString();
+          orderId.add(orderId1);
+          String date1 = qna[i].substring(8);
+          String formatDate =
+              "20${date1.substring(0, 2)}/${date1.substring(2, 4)}/${date1.substring(4, 6)} ${date1.substring(6, 8)}:${date1.substring(8, 10)}:${date1.substring(10)}";
+          print(formatDate);
+          time.add(formatDate);
+          var category1 = qna1['category'];
+          category.add(category1);
+          var title1 = qna1['title'];
+          title.add(title1);
+          var detail1 = qna1['detail'];
+          detail.add(detail1);
+          isLoading=false;
+        }print('$orderId,$category, $time,$title,$qnaId');
+      });
+    },);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,17 +78,24 @@ class qnalistPage extends StatelessWidget {
           elevation: 0.0,
           centerTitle: true,
         ),
-        body: SingleChildScrollView(
+        body: isLoading
+            ? Center(
+          child: CircularProgressIndicator(),
+        )
+            : SingleChildScrollView(
           child: Column(
-            // mainAxisSize: MainAxisSize.max,
-            // mainAxisAlignment: MainAxisAlignment.center,
-            children:[
-              Container(width: 500,
-                  child: Divider(
-                      height: 0.0,
-                      color: Colors.black12, thickness: 1.0)),
-              const MyStatelessWidget(),
-            ],
+           children:[
+            for (int i=0;i<orderId.length;i++)...[
+                CustomListItemTwo(
+                  date: time[i],
+                  orderno: orderId[i],
+                  title: title[i],
+                  category: category[i],
+                  detail: detail[i],
+                  qnano: qnaId[i],
+                  ),
+              ]
+           ],
           ),
         )
     );
@@ -40,15 +106,19 @@ class qnalistPage extends StatelessWidget {
 class _qnaDescription extends StatelessWidget {
   const _qnaDescription({
     required this.date,
-    required this.qnano,
+    required this.orderno,
     required this.title,
     required this.category,
+    required this.detail,
+    required this.qnano,
   });
 
   final String date;
-  final String qnano;
+  final String orderno;
   final String title;
   final String category;
+  final String detail;
+  final String qnano;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +128,7 @@ class _qnaDescription extends StatelessWidget {
           margin: EdgeInsets.fromLTRB(1.0, 7.0, 1.0, 0.0),
           color: Colors.white,
           child: ListTile(
-            title: Text(qnano,style:TextStyle(color:Color(0xff2eb67d),
+            title: Text(orderno,style:TextStyle(color:Color(0xff2eb67d),
                 fontSize:11,
                 fontWeight: FontWeight.w500)),
             subtitle:
@@ -73,7 +143,7 @@ class _qnaDescription extends StatelessWidget {
             onTap: () {
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context)=>qnaDetailPage())
+                  MaterialPageRoute(builder: (context)=>qnaDetailPage(orderno,title,date,category, detail,qnano))
               );
             },
             ),
@@ -86,15 +156,19 @@ class CustomListItemTwo extends StatelessWidget {
   const CustomListItemTwo({
     super.key,
     required this.date,
-    required this.qnano,
+    required this.orderno,
     required this.title,
-    required this.category
+    required this.category,
+    required this.detail,
+    required this.qnano,
   });
 
   final String date;
-  final String qnano;
+  final String orderno;
   final String title;
   final String category;
+  final String detail;
+  final String qnano;
 
   @override
   Widget build(BuildContext context) {
@@ -107,9 +181,11 @@ class CustomListItemTwo extends StatelessWidget {
             Expanded(
                 child: _qnaDescription(
                   date: date,
-                  qnano: qnano,
+                  orderno: orderno,
                   title: title,
                   category: category,
+                  detail: detail,
+                  qnano: qnano,
 
                 ),
               ),
@@ -120,48 +196,6 @@ class CustomListItemTwo extends StatelessWidget {
   }
 }
 
-class MyStatelessWidget extends StatelessWidget {
-  const MyStatelessWidget({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: <Widget>[
-              CustomListItemTwo(
-               date:'2023/01/31' ,
-               qnano: 'qna013140407171',
-               title: '물품 인식 재오류',
-               category: '물품 인식 오류',
-
-              ),
-              CustomListItemTwo(
-                date:'2023/01/20' ,
-                qnano: 'qna01234913671',
-                title: '포인트 사용 문의',
-                category: '포인트',
-              ),
-              CustomListItemTwo(
-                date:'2023/01/04' ,
-                qnano: 'qna079214910233',
-                title: '결제가 안돼요',
-                category: '결제',
-              ),
-              CustomListItemTwo(
-                date:'2023/01/02' ,
-                qnano: 'qna010246194619',
-                title: '앱 건의사항이요',
-                category: '기타',
-              ),
-            ],
-
-          )
-      ),
-
-    );
-  }
-}
 
 
