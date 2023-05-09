@@ -19,6 +19,7 @@ class _refundInfo extends State<refundInfo> {
   List<dynamic> time=[];
   List<dynamic> isRefunded=[];
   List<dynamic> totalPrice=[];
+  bool noData = true;
 
   @override
   void initState() {
@@ -60,6 +61,7 @@ class _refundInfo extends State<refundInfo> {
           var totalPrice1 = bill1['totalPrice'];
           var f = NumberFormat("#,###");
           totalPrice.add(f.format(totalPrice1));
+          noData = false;
         }print('$orderId,$paymentId, $time,$totalPrice');
       });
     },);
@@ -81,7 +83,9 @@ class _refundInfo extends State<refundInfo> {
           centerTitle: true,
         ),
         resizeToAvoidBottomInset: false,
-        body: SingleChildScrollView(
+        body:
+        noData ? Center(child: Text("환불 데이터가 존재하지 않습니다."))
+        : SingleChildScrollView(
           child: Column(
             // mainAxisSize: MainAxisSize.max,
             // mainAxisAlignment: MainAxisAlignment.center,

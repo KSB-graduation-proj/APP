@@ -21,6 +21,7 @@ class askqnaPage extends StatefulWidget{
 class _askqnaPage extends State<askqnaPage> {
 
   List<String> orderNo =[];
+  bool noData=true;
 
   void textClear(){
     orderId=null;
@@ -53,6 +54,7 @@ class _askqnaPage extends State<askqnaPage> {
         orderNo = keytoList(data.keys); //주문번호 저장
         list.addAll(orderNo);
         print('order:$list');
+        noData=false;
       });
   },);
   }
@@ -72,7 +74,12 @@ class _askqnaPage extends State<askqnaPage> {
       elevation: 0.0,
       centerTitle: true,
       ),
-    body: Center(
+    body: noData ?
+    Center(
+      child: Text("주문 데이터가 존재하지 않습니다."),
+    )
+        :
+    Center(
     child: Column(
     //\\mainAxisAlignment: MainAxisAlignment.center,
     children: [

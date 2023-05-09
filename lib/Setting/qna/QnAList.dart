@@ -19,6 +19,7 @@ class _qnalistPage extends State<qnalistPage> {
   List<dynamic> detail=[];
 
   bool isLoading = true;
+  bool noData = true;
 
   @override
   void initState() {
@@ -57,6 +58,7 @@ class _qnalistPage extends State<qnalistPage> {
           title.add(title1);
           var detail1 = qna1['detail'];
           detail.add(detail1);
+          noData=false;
           isLoading=false;
         }print('$orderId,$category, $time,$title,$qnaId');
       });
@@ -78,7 +80,12 @@ class _qnalistPage extends State<qnalistPage> {
           elevation: 0.0,
           centerTitle: true,
         ),
-        body: isLoading
+        body: noData
+        ? Center(
+        child: Text('1:1 문의가 존재하지 않습니다.')
+    )
+        :
+        isLoading
             ? Center(
           child: CircularProgressIndicator(),
         )

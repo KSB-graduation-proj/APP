@@ -13,6 +13,7 @@ class _pointPage extends State<pointPage> {
   int? point;
   bool? coopMember;
   bool isLoading = true;
+  bool noData = true;
 
   void initState() {
     super.initState();
@@ -27,6 +28,7 @@ class _pointPage extends State<pointPage> {
         point = data['point'];
         coopMember = data['coopMember'];
         isLoading = false;
+        noData = false;
       });
     },);
   }
@@ -49,7 +51,12 @@ class _pointPage extends State<pointPage> {
         centerTitle: true,
       ),
       resizeToAvoidBottomInset: false,
-      body: isLoading
+      body:
+      noData ? Center(
+        child: Text("포인트 정보 미존재"),
+      )
+          :
+      isLoading
           ? Center(
         child: CircularProgressIndicator(),
       )

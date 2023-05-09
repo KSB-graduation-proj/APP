@@ -36,7 +36,6 @@ class _refundbillPage extends State<refundbillPage> {
     return list;
   }
   void getBillData() {
-
     final doc = firestore.collection('payment').doc("${email}");
     doc.get().then((DocumentSnapshot doc)
     {
@@ -67,9 +66,8 @@ class _refundbillPage extends State<refundbillPage> {
           count.add(priceList['count']);
         }
         isLoading = false;
+
         print('$product, $price, $count');
-
-
       });
     },);
 

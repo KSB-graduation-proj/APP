@@ -24,6 +24,8 @@ class _myPage extends State<myPage>{
   List<dynamic> totalPrice=[];
 
   bool isLoading = true;
+  bool isLoading1 = true;
+  bool noData = true;
 
   @override
   void initState() {
@@ -43,6 +45,7 @@ class _myPage extends State<myPage>{
         if(coopMember==true){
           coop='조합원';}
         else{coop='비조합원';}
+        isLoading1 = false;
 
       });
     },);
@@ -87,6 +90,7 @@ class _myPage extends State<myPage>{
           var f = NumberFormat("#,###");
           totalPrice.add(f.format(totalPrice1));
           isLoading = false;
+          noData=false;
         }print('$orderId,$paymentId, $time,$isPaid,$totalPrice');
       });
     },);
@@ -98,7 +102,42 @@ class _myPage extends State<myPage>{
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: isLoading
+        body: isLoading1 ?
+         Center(
+        child: CircularProgressIndicator(),
+    )
+        :
+        noData ?
+            Center(
+                child:Column(
+                  children: [
+                  SizedBox(height: 20.0,),
+              ClipOval(
+                  child: Image.asset('assets/profile1.jpg',
+                      width: 90,
+                      height: 90,
+                      fit:BoxFit.fill)
+              ),
+              SizedBox(height: 10.0,),
+              Text('$name', textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(height: 10.0,),
+              Text('$coop',textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black54,
+                ),
+              ),
+              SizedBox(height: 100),
+              Text('결제 데이터가 존재하지 않습니다.'),
+                  ],
+                ))
+       : isLoading
             ? Center(
           child: CircularProgressIndicator(),
         )

@@ -1,8 +1,29 @@
 import 'package:app_test/Setting/pay.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class addpayPage extends StatelessWidget {
+import '../firebase.dart';
+import '../home.dart';
+
+String? company;
+String? number;
+String? date;
+
+class addpayPage extends StatefulWidget {
   const addpayPage({Key? key}) : super(key: key);
+  @override
+  State<addpayPage> createState() => _addpayPage();
+}
+class _addpayPage extends State<addpayPage>{
+  void textClear(){
+    company=null;
+    number=null;
+    date=null;
+  }
+
+  void initState(){
+    textClear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,24 +78,7 @@ class addpayPage extends StatelessWidget {
                       fontSize:17,
                       fontWeight: FontWeight.w600
                   )),
-              onTap: () {
-              },
             ),
-            Container(width: 500,
-                child: Divider(
-                    height: 0.0,
-                    color: Colors.black12, thickness: 1.0)),
-            ListTile(
-              //tileColor: Color(0xffF2F1F6),
-              title: Text('포인트',
-                  style:TextStyle(color:Color(0xff2eb67d),
-                      fontSize:17,
-                      fontWeight: FontWeight.w600
-                  )),
-              onTap: () {
-              },
-            ),
-
             Container(width: 500,
                 child: Divider(
                     height: 0.0,
@@ -89,200 +93,193 @@ class addpayPage extends StatelessWidget {
                       fontWeight: FontWeight.w600)),],
             ),
             SizedBox(height: 10,),
-            addpayForm()
+            Container(width: 500,
+                child: Divider(
+                    height: 0.0,
+                    color: Colors.black12, thickness: 1.0)),
+            SizedBox(height: 10,),
+            Row(children:[
+              SizedBox(width: 15,),
+              Text("카드사",
+                  style:TextStyle(color:Color(0xff2eb67d),
+                      fontSize:17,
+                      fontWeight: FontWeight.w600)),
+              SizedBox(width: 75,),
+              SizedBox(width:200,
+                child:TextField(
+                  onChanged: (newText){company=newText;},
+                  maxLines: 1,
+                  minLines: 1,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: 10.0),
+                    border: InputBorder.none,
+                    hintText: '카드사',
+                    labelStyle: TextStyle(color: Color(0xff2eb67d), ),
+                  ),
+                ), )
+            ],
+            ),
+            Row(children:[
+              SizedBox(width: 15,),
+              Text("카드 번호",
+                  style:TextStyle(color:Color(0xff2eb67d),
+                      fontSize:17,
+                      fontWeight: FontWeight.w600)),
+              SizedBox(width: 55,),
+              SizedBox(width:200,
+                child:TextField(
+                  onChanged: (newText){number=newText;},
+                  keyboardType: TextInputType.number,
+                  maxLines: 1,
+                  minLines: 1,
+
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: 10.0),
+                    border: InputBorder.none,
+                    hintText: '0000-0000-0000-0000',
+                    labelStyle: TextStyle(color: Color(0xff2eb67d), ),
+                  ),
+                ), )
+            ],
+            ),
+            Row(children:[
+              SizedBox(width: 15,),
+              Text("만료일",
+                  style:TextStyle(color:Color(0xff2eb67d),
+                      fontSize:17,
+                      fontWeight: FontWeight.w600)),
+              SizedBox(width: 75,),
+              SizedBox(width:200,
+                child:TextField(
+                  onChanged: (newText){date=newText;},
+                  keyboardType: TextInputType.datetime,
+                  maxLines: 1,
+                  minLines: 1,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: 10.0),
+                    border: InputBorder.none,
+                    hintText: 'YYYY / MM',
+                    labelStyle: TextStyle(color: Color(0xff2eb67d), ),
+                  ),
+                ), )
+            ],
+            ),
+            SizedBox(height:30),
+            Container(width: 500,
+                child: Divider(
+                    height: 0.0,
+                    color: Colors.black12, thickness: 1.0)),
+
+            ListTile(
+              minVerticalPadding: 20.0,
+              title: Text('결제수단 추가하기',
+                  textAlign: TextAlign.center,
+                  style:TextStyle(color:Colors.black,
+                    fontSize:18,
+                    fontWeight: FontWeight.w600,
+
+                  )) ,
+              onTap: () {
+                if (company!=null&&number!=null&&date!=null) {
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('결제수단 추가'),
+                      content: const Text('이 결제수단을 등록하시겠습니까?'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'Cancel'),
+                          child: const Text('아니요'),
+                        ),
+                        TextButton(
+                            child: const Text('예'),
+                            onPressed:() {
+                              final card = firestore.collection("card");
+                              final id = '${company}_${number}';
+                              final data = <String, dynamic>
+                              {
+                                '${id}': {
+                                  'exdate': date,
+                                  'company': company,
+                                  'number': number,
+                                  'default': false,
+                                } };
+                              card.doc(email).set(data, SetOptions(merge: true));
+                              showDialog<String>(
+                                context: context,
+                                builder: (context) =>
+                                    AlertDialog(
+                                      content: const Text(
+                                          '카드 등록이 완료되었습니다.'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Home()));
+                                           },
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    ),
+                              );}
+                        ),
+                      ],
+                    ),
+                  );}
+                else{
+                  showDialog(context: context, builder: (context)=> AlertDialog(
+                      content: const Text ('모든 값의 입력은 필수입니다.'),
+                      actions:<Widget>[
+                        TextButton(onPressed: (){Navigator.of(context).pop();}, child: const Text('예'))
+                      ]
+                  ));
+                }},
+            ),
+            Container(width: 500,
+                child: Divider(
+                    height: 0.0,
+                    color: Colors.black12, thickness: 1.0)),
 
           ],
         ),
-
       ),
-
-
-
     );
   }
 }
+class CustomTextField extends StatelessWidget {
+  String label;
+  void Function(String text) onChangefunc;
 
-class addpayForm extends StatefulWidget {
-  const addpayForm({super.key});
+  CustomTextField({
+    required this.label,
+    required this.onChangefunc,
+    Key? key,
+  }) : super(key: key);
+
   @override
-  addpayFormState createState() {
-    return addpayFormState();
+  Widget build(BuildContext context) {
+    return Padding(padding: const EdgeInsets.fromLTRB(0.0,2.0,0.0,5.0),
+      child:
+      TextField(
+        onChanged: (newText) {
+          onChangefunc(newText);
+        },
+        cursorColor: Color(0xff2eb67d),
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: '문의 제목을 입력하세요.',
+            hintStyle: TextStyle(fontSize: 14),
+            focusColor: Color(0xff2eb67d),
+            hoverColor: Color(0xff2eb67d)
+        ),),);
   }
+
 }
 
-class addpayFormState extends State<addpayForm> {
-  final addpayKey = GlobalKey<FormState>();
-  Widget build(BuildContext context){
-    return Form(
-      key: addpayKey,
-      child: Column(
-        children: [
-          Container(width: 500,
-              child: Divider(
-                  height: 0.0,
-                  color: Colors.black12, thickness: 1.0)),
-          SizedBox(height: 20,),
-          Row(children:[
-            SizedBox(width: 15,),
-            Text("카드사",
-                style:TextStyle(color:Color(0xff2eb67d),
-                    fontSize:17,
-                    fontWeight: FontWeight.w600)),
-            SizedBox(width: 75,),
-            SizedBox(width:200,
-              child:TextFormField(
-                maxLines: 1,
-                minLines: 1,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(
-                      vertical: 20.0, horizontal: 10.0),
-                  border: InputBorder.none,
-                  hintText: '카드사',
-                  labelStyle: TextStyle(color: Color(0xff2eb67d), ),
-                ),
-                validator: (value)=> value==null||value.isEmpty?
-                '카드사를 입력해주세요.':null ,
-              ), )
-          ],
-          ),
-          Row(children:[
-            SizedBox(width: 15,),
-            Text("카드 번호",
-                style:TextStyle(color:Color(0xff2eb67d),
-                    fontSize:17,
-                    fontWeight: FontWeight.w600)),
-            SizedBox(width: 55,),
-            SizedBox(width:200,
-              child:TextFormField(
-                keyboardType: TextInputType.number,
-                maxLines: 1,
-                minLines: 1,
 
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(
-                      vertical: 20.0, horizontal: 10.0),
-                  border: InputBorder.none,
-                  hintText: '0000-0000-0000-0000',
-                  labelStyle: TextStyle(color: Color(0xff2eb67d), ),
-                ),
-                validator: (value)=> value==null||value.isEmpty?
-                '카드 번호 형식에 맞게 입력해주세요.':null ,
-              ), )
-          ],
-          ),
-          Row(children:[
-            SizedBox(width: 15,),
-            Text("만료일",
-                style:TextStyle(color:Color(0xff2eb67d),
-                    fontSize:17,
-                    fontWeight: FontWeight.w600)),
-            SizedBox(width: 75,),
-            SizedBox(width:200,
-              child:TextFormField(
-                keyboardType: TextInputType.datetime,
-                maxLines: 1,
-                minLines: 1,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(
-                      vertical: 20.0, horizontal: 10.0),
-                  border: InputBorder.none,
-                  hintText: 'YYYY / MM',
-                  labelStyle: TextStyle(color: Color(0xff2eb67d), ),
-                ),
-                validator: (value)=> value==null||value.isEmpty?
-                '만료일 형식에 맞게 입력해주세요.':null ,
-              ), )
-          ],
-          ),
-          Row(children:[
-            SizedBox(width: 15,),
-            Text("CVS",
-                style:TextStyle(color:Color(0xff2eb67d),
-                    fontSize:17,
-                    fontWeight: FontWeight.w600)),
-            SizedBox(width: 90,),
-            SizedBox(width:200,
-              child:TextFormField(
-                keyboardType: TextInputType.number,
-                maxLines: 1,
-                minLines: 1,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(
-                      vertical: 20.0, horizontal: 10.0),
-                  border: InputBorder.none,
-                  hintText: '카드 뒷면 숫자 3자리',
-                  labelStyle: TextStyle(color: Color(0xff2eb67d), ),
-                ),
-                validator: (value)=> value==null||value.isEmpty?
-                '정확한 CVS값을 입력해주세요.':null ,
-              ), )
-          ],
-          ),
-          Row(children:[
-            SizedBox(width: 15,),
-            Text("PIN",
-                style:TextStyle(color:Color(0xff2eb67d),
-                    fontSize:17,
-                    fontWeight: FontWeight.w600)),
-            SizedBox(width: 95,),
-            SizedBox(width:200,
-              child:TextFormField(
-                obscureText: true,
-                keyboardType: TextInputType.number,
-                maxLines: 1,
-                minLines: 1,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(
-                      vertical: 20.0, horizontal: 10.0),
-                 // border: InputBorder.none,
-                  hintText: '비밀번호의 앞 2자리',
-                  labelStyle: TextStyle(color: Color(0xff2eb67d), ),
-                ),validator: (value)=> value==null||value.isEmpty?
-              '정확한 PIN값을 입력해주세요.':null ,
-              ), )
-          ],
-          ),
-          SizedBox(height:30),
-          Container(width: 500,
-              child: Divider(
-                  height: 0.0,
-                  color: Colors.black12, thickness: 1.0)),
 
-          ListTile(
-            minVerticalPadding: 20.0,
-            title: Text('결제수단 추가하기',
-                textAlign: TextAlign.center,
-                style:TextStyle(color:Colors.black,
-                  fontSize:18,
-                  fontWeight: FontWeight.w600,
-
-                )) ,
-            onTap: () {
-                if (addpayKey.currentState!.validate()) {
-                showDialog<String>(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                title: const Text('결제수단 추가'),
-                content: const Text('이 결제수단을 등록하시겠습니까?'),
-                actions: <Widget>[
-                  TextButton(
-                  onPressed: () => Navigator.pop(context, 'Cancel'),
-                  child: const Text('아니요'),
-                  ),
-                  TextButton(onPressed: (){
-                    Navigator.push(context,
-                    MaterialPageRoute(builder:(context)=>payPage()));
-            }, child: const Text('예'),
-              ),
-              ],),);
-            }},
-          ),
-          Container(width: 500,
-              child: Divider(
-                  height: 0.0,
-                  color: Colors.black12, thickness: 1.0)),
-        ],
-      )
-    );
-  }
-}

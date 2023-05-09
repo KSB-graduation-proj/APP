@@ -1,11 +1,39 @@
 import 'package:app_test/login/login.dart';
-import 'package:app_test/login/signup.dart';
-import 'package:app_test/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class quitPage extends StatelessWidget {
-  const quitPage({Key? key}) : super(key: key);
+class quitPage extends StatefulWidget {
+  @override
+  State<quitPage> createState() => _quitPage();
 
+}
+
+class _quitPage extends State<quitPage>{
+  TextEditingController _passwordController = TextEditingController();
+
+  // 사용자 삭제 함수
+  void deleteUser() async {
+    String password = _passwordController.text.trim();
+
+    // Firebase 인증 객체 생성
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    // 현재 인증된 사용자 가져오기
+    User? user = auth.currentUser;
+
+    if (user != null) {
+      // 사용자의 비밀번호 재인증
+      AuthCredential credential = EmailAuthProvider.credential(email: user.email!, password: password);
+      try {
+        await user.reauthenticateWithCredential(credential);
+        // 사용자 삭제
+        await user.delete();
+        print('사용자가 성공적으로 삭제되었습니다.');
+      } catch (e) {
+        print('사용자 삭제 오류: $e');
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,17 +62,58 @@ class quitPage extends StatelessWidget {
                     color: Colors.black12, thickness: 1.0)),
 
             SizedBox(height: 120,),
+
             Text('정말로 탈퇴하시겠습니까?',style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),),
             SizedBox(height: 10,),
             Text('계정을 삭제하려면 비밀번호를 입력하세요',style: TextStyle(fontSize: 15,color: Colors.black54),),
             SizedBox(height: 10,),
             Icon(
-              Icons.dangerous_outlined,
+              Icons.account_circle,
               size: 200.0,
               color: Color(0xff2eb67d),
             ),
             SizedBox(height: 10,),
-            const LoginForm(),
+            Row(
+              children: [
+                Expanded(
+                  flex: 1, // 20%
+                  child: Container(color: Colors.transparent),
+                ),
+                Expanded(
+                  flex: 14, // 20%
+                  child: TextField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    textAlign: TextAlign.start,
+                    keyboardType: TextInputType.visiblePassword,
+                    cursorColor: Color(0xff2eb67d),
+                    decoration: InputDecoration(
+                      hintStyle: TextStyle(fontSize: 17,color:  Color(0xff2eb67d),),
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 20.0, horizontal: 10.0),
+                      border: InputBorder.none,
+                      hintText: '비밀번호를 입력하세요',
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1, // 20%
+                  child: Container(color: Colors.transparent),
+                )
+              ],
+            ),
+        SizedBox(height: 40,),
+        ElevatedButton(
+          onPressed:deleteUser,
+          child: Text('사용자 삭제'),
+          style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.white,
+          backgroundColor: Color(0xff2eb67d),
+          padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 70.0),
+          textStyle: const TextStyle(fontSize: 20,
+          fontWeight: FontWeight.bold),
+          ),
+        ),
 
           ],
         ),
@@ -53,96 +122,6 @@ class quitPage extends StatelessWidget {
   }
 }
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
-  @override
-  LoginFormState createState() {
-    return LoginFormState();
-  }
-}
-
-class LoginFormState extends State<LoginForm> {
-  final _quitKey = GlobalKey<FormState>();
 
 
-  Widget build(BuildContext context) {
-    return Form(
-      key: _quitKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                flex: 1, // 20%
-                child: Container(color: Colors.transparent),
-              ),
-              Expanded(
-                flex: 14, // 20%
-                child: TextFormField(
-                  obscureText: true,
-                  textAlign: TextAlign.start,
-                  keyboardType: TextInputType.visiblePassword,
-                  cursorColor: Color(0xff2eb67d),
-                  decoration: InputDecoration(
-                      hintStyle: TextStyle(fontSize: 17,color:  Color(0xff2eb67d)),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: 20.0, horizontal: 10.0),
-                    border: InputBorder.none,
-                    hintText: '비밀번호를 입력하세요',
-                  ),
-                  validator: (value)=> value==null||value.isEmpty?
-                  '비밀번호를 입력하세요':null,
-                ),
-              ),
-              Expanded(
-                flex: 1, // 20%
-                child: Container(color: Colors.transparent),
-              )
-            ],
-          ),
-          SizedBox(height: 40,),
-          Row(
-              children:[
-                SizedBox(width: 100,),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Color(0xff2eb67d),
-                    padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 70.0),
-                    textStyle: const TextStyle(fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: () {
-                    if (_quitKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('계정 삭제 중 ...')),
-                      );
-                      showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                        content: const Text('회원 탈퇴가 완료되었습니다.'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context)=>loginPage()));
-                            },
-                            child: const Text('OK'),
-                          ),
-                        ],
-                      ),);
-                    }
-                  },
-                  child: const Text('계정 삭제'),
-                ),
-              ]
 
-          ),
-
-
-        ],
-      ),
-    );
-  }
-}
