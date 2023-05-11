@@ -1,4 +1,4 @@
-# Coop-Go App Front
+# Coop-Go App 
 <a href= "https://soobang-dev.tistory.com/"><img src="https://img.shields.io/badge/Tistory-white?style=for-the-badge&logo=Tistory&logoColor=black"/></a>
 </br>
 개발환경 구축방법 => <a href= "https://soobang-dev.tistory.com/3"><img src="https://img.shields.io/badge/Tistory-blue?style=for-the-badge&logo=Tistory&logoColor=black"/></a>
@@ -9,6 +9,10 @@
 <img src="https://img.shields.io/badge/Android-green?style=for-the-badge&logo=Android&logoColor=black"/></a>
 <img src="https://img.shields.io/badge/Flutter-blue?style=for-the-badge&logo=Flutter&logoColor=black"/></a>
 <img src="https://img.shields.io/badge/Dart-navy?style=for-the-badge&logo=Dart&logoColor=white"/></a>
+
+### Tools
+- flutter : 안드로이드 기반 coop-go 애플리케이션 제작을 위해 프레임워크 flutter 사용
+- firebase : noSQL DB firestore로 데이터 저장 및 noServer backend functions로 결제 함수 작성
 
 ## 화면 소개
 home: 홈 화면 기본틀 + 좌측 네비게이션 바 </br>
@@ -22,6 +26,8 @@ refundRequest: 환불 요청 </br>
 
 ## made by
 방현수
+
+
 
 ## Reference
 [Flutter Documentation]
