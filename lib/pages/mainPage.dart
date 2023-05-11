@@ -2,8 +2,6 @@ import 'package:app_test/firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../temp.dart';
-
 class mainPage extends StatefulWidget {
   const mainPage({super.key});
 

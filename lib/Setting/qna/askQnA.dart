@@ -1,4 +1,3 @@
-import 'package:app_test/Setting/qna/QnA.dart';
 import 'package:app_test/home.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
@@ -21,7 +20,8 @@ class askqnaPage extends StatefulWidget{
 class _askqnaPage extends State<askqnaPage> {
 
   List<String> orderNo =[];
-  bool noData=true;
+  bool noData=false;
+  bool isLoading = true;
 
   void textClear(){
     orderId=null;
@@ -46,15 +46,23 @@ class _askqnaPage extends State<askqnaPage> {
 
   void getQnaData(){
     final doc = firestore.collection('order').doc("${email}");
+    if(doc!=null){
+      noData = false;
+    }
     doc.get().then((DocumentSnapshot doc)
     {
       setState(() {
-        list.clear();
-        final data = doc.data() as Map<String, dynamic>;
-        orderNo = keytoList(data.keys); //주문번호 저장
-        list.addAll(orderNo);
-        print('order:$list');
-        noData=false;
+        if(doc.data()==null){
+          noData=true;
+        }
+        else{
+          list.clear();
+          final data = doc.data() as Map<String, dynamic>;
+          orderNo = keytoList(data.keys); //주문번호 저장
+          list.addAll(orderNo);
+          print('order:$list');
+          isLoading = false;
+        }
       });
   },);
   }
@@ -74,9 +82,13 @@ class _askqnaPage extends State<askqnaPage> {
       elevation: 0.0,
       centerTitle: true,
       ),
-    body: noData ?
+    body: isLoading ?
+    noData ?
     Center(
       child: Text("주문 데이터가 존재하지 않습니다."),
+    )
+    : Center(
+      child: CircularProgressIndicator(),
     )
         :
     Center(

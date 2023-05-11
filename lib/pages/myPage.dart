@@ -25,7 +25,7 @@ class _myPage extends State<myPage>{
 
   bool isLoading = true;
   bool isLoading1 = true;
-  bool noData = true;
+  bool noData = false;
 
   @override
   void initState() {
@@ -63,6 +63,10 @@ class _myPage extends State<myPage>{
     doc.get().then((DocumentSnapshot doc)
     {
       setState(() {
+        if(doc.data()==null){
+          noData=true;
+        }
+        else{
         final data = doc.data() as Map<String,dynamic>; // 모든 영수증 데이터
         List<String>? bill = keytoList(data.keys);
         print('bill:$bill');
@@ -90,8 +94,7 @@ class _myPage extends State<myPage>{
           var f = NumberFormat("#,###");
           totalPrice.add(f.format(totalPrice1));
           isLoading = false;
-          noData=false;
-        }print('$orderId,$paymentId, $time,$isPaid,$totalPrice');
+        }}print('$orderId,$paymentId, $time,$isPaid,$totalPrice');
       });
     },);
 

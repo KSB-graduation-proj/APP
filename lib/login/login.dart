@@ -1,12 +1,11 @@
 import 'package:app_test/firebase_options.dart';
 import 'package:app_test/login/signup.dart';
 import 'package:app_test/home.dart';
-import 'package:app_test/qrscan/qrScan.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutterfire_ui/auth.dart';
 
-import '../temp.dart';
+import '../admin/adminhome.dart';
 
 class loginPage extends StatefulWidget {
   const loginPage({Key? key}) : super(key: key);
@@ -53,7 +52,7 @@ class _loginPageState extends State<loginPage> {
           } else {
             User? user =FirebaseAuth.instance.currentUser;
             if(user?.email=="admin@ewhain.net"){
-              return QrScan();
+              return adminHome();
             }
             else{
               return Home();

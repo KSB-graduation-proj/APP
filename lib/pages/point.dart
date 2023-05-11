@@ -22,13 +22,16 @@ class _pointPage extends State<pointPage> {
 
   void setData() {
     final doc = firestore.collection('memberCoop').doc("${email}");
+    if(doc!=null){
+      noData = false;
+    }
     doc.get().then((DocumentSnapshot doc) {
       setState(() {
         final data = doc.data() as Map<String, dynamic>;
         point = data['point'];
         coopMember = data['coopMember'];
         isLoading = false;
-        noData = false;
+
       });
     },);
   }

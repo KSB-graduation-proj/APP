@@ -14,8 +14,9 @@ class profilePage extends StatefulWidget {
 }
 
 class _profilePage extends State<profilePage> {
-  int? point;
-
+  var point;
+  var code;
+  bool isLoading=true;
   void initState() {
     super.initState();
     setData();
@@ -25,9 +26,20 @@ class _profilePage extends State<profilePage> {
     final doc = firestore.collection('memberCoop').doc("${email}");
     doc.get().then((DocumentSnapshot doc)
     {
+      code = email.replaceFirst('@ewhain.net', '');
       setState(() {
-        final data = doc.data() as Map<String,dynamic>;
-        point = data['point'];
+        if(doc.data()==null){
+          if(widget.coop=="조합원"){
+            point = "생협 연결 후 포인트 표시";
+          }else{
+            point=0;
+          }
+        }
+        else{
+          final data = doc.data() as Map<String,dynamic>;
+          point = data['point'];
+        }
+        isLoading = false;
       });
     },);
   }
@@ -47,7 +59,12 @@ class _profilePage extends State<profilePage> {
         centerTitle: true,
       ),
       resizeToAvoidBottomInset: false,
-      body: SingleChildScrollView(
+      body:
+      isLoading
+        ?
+        Center(child: CircularProgressIndicator(),)
+        :
+      SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

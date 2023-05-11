@@ -19,7 +19,7 @@ class _qnalistPage extends State<qnalistPage> {
   List<dynamic> detail=[];
 
   bool isLoading = true;
-  bool noData = true;
+  bool noData = false;
 
   @override
   void initState() {
@@ -39,28 +39,32 @@ class _qnalistPage extends State<qnalistPage> {
     final doc = firestore.collection('qna').doc("${email}");
     doc.get().then((DocumentSnapshot doc) {
       setState(() {
-        final data = doc.data() as Map<String,dynamic>; // 모든 영수증 데이터
-        List<String>? qna = keytoList(data.keys);
-        print('qna:$qna');
-        for(int i = 0; i<qna!.length;i++){
-          qnaId.add(qna![i]);
-          var qna1 = data[qna![i]]; // 모든 결제번호 데이터
-          var orderId1 =qna1!['orderId'].toString();
-          orderId.add(orderId1);
-          String date1 = qna[i].substring(8);
-          String formatDate =
-              "20${date1.substring(0, 2)}/${date1.substring(2, 4)}/${date1.substring(4, 6)} ${date1.substring(6, 8)}:${date1.substring(8, 10)}:${date1.substring(10)}";
-          print(formatDate);
-          time.add(formatDate);
-          var category1 = qna1['category'];
-          category.add(category1);
-          var title1 = qna1['title'];
-          title.add(title1);
-          var detail1 = qna1['detail'];
-          detail.add(detail1);
-          noData=false;
-          isLoading=false;
-        }print('$orderId,$category, $time,$title,$qnaId');
+        if(doc.data()==null){
+          noData=true;
+        }
+        else{
+          final data = doc.data() as Map<String,dynamic>; // 모든 영수증 데이터
+          List<String>? qna = keytoList(data.keys);
+          print('qna:$qna');
+          for(int i = 0; i<qna!.length;i++){
+            qnaId.add(qna![i]);
+            var qna1 = data[qna![i]]; // 모든 결제번호 데이터
+            var orderId1 =qna1!['orderId'].toString();
+            orderId.add(orderId1);
+            String date1 = qna[i].substring(8);
+            String formatDate =
+                "20${date1.substring(0, 2)}/${date1.substring(2, 4)}/${date1.substring(4, 6)} ${date1.substring(6, 8)}:${date1.substring(8, 10)}:${date1.substring(10)}";
+            print(formatDate);
+            time.add(formatDate);
+            var category1 = qna1['category'];
+            category.add(category1);
+            var title1 = qna1['title'];
+            title.add(title1);
+            var detail1 = qna1['detail'];
+            detail.add(detail1);
+            isLoading=false;}
+        }
+        print('$orderId,$category, $time,$title,$qnaId');
       });
     },);
   }

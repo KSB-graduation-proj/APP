@@ -16,7 +16,7 @@ class _payPage extends State<payPage> {
   List<dynamic> isDefault=[];
 
   bool isLoading = true;
-  bool noData = true;
+  bool noData = false;
   @override
   void initState() {
     super.initState();
@@ -29,25 +29,32 @@ class _payPage extends State<payPage> {
     }
     return list;
   }
+
   void getCardData() {
     final doc = firestore.collection('card').doc("${email}");
     doc.get().then((DocumentSnapshot doc)
     {
       setState(() {
-        final data = doc.data() as Map<String,dynamic>; // 모든 영수증 데이터
-        List<String>? card = keytoList(data.keys);
-        print('bill:$card');
-        for(int i=0; i< card!.length ;i++) {
-          cardId.add(card![i]);
-          var card1 = data[card![i]]; // 모든 카드 데이터
-          var company1 =card1!['company'];
-          company.add(company1);
-          var number1 =card1!['number'];
-          number.add(number1);
-          var isDefault1 = card1['default'];
-          isDefault.add(isDefault1);
-          isLoading = false;
-          noData = false;
+        if(doc.data()==null){
+          noData=true;
+        }
+        else{
+          final data = doc.data() as Map<String,dynamic>;
+          // 모든 영수증 데이터
+          List<String>? card = keytoList(data.keys);
+          print('bill:$card');
+          for(int i=0; i< card!.length ;i++) {
+            cardId.add(card![i]);
+            var card1 = data[card![i]]; // 모든 카드 데이터
+            var company1 =card1!['company'];
+            company.add(company1);
+            var number1 =card1!['number'];
+            number.add(number1);
+            var isDefault1 = card1['default'];
+            isDefault.add(isDefault1);
+            isLoading = false;
+        }
+
         }print('$cardId, $company,$number, $isDefault');
       });
     },);
@@ -71,42 +78,41 @@ class _payPage extends State<payPage> {
 
       body:
       noData ?
+      Column(
+        children: [
+          SizedBox(height: 100,),
+          Text("등록된 결제수단이 존재하지 않습니다."),
+          SizedBox(height: 100,),
+          Container(width: 500,
+              child: Divider(
+                  height: 0.0,
+                  color: Colors.black12, thickness: 1.0)),
 
-          Column(
-            children: [
-              SizedBox(height: 100,),
-              Text("등록된 결제수단이 존재하지 않습니다."),
-              SizedBox(height: 100,),
-              Container(width: 500,
-                  child: Divider(
-                      height: 0.0,
-                      color: Colors.black12, thickness: 1.0)),
+          ListTile(
+            minVerticalPadding: 20.0,
+            title: Text('지불 방법 추가',
+                textAlign: TextAlign.center,
+                style:TextStyle(color:Colors.black,
+                  fontSize:18,
+                  fontWeight: FontWeight.w600,
+                )) ,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder:(context) => addpayPage(),),
+              );
+            },),
+          Container(width: 500,
+              child: Divider(
+                  height: 0.0,
+                  color: Colors.black12, thickness: 1.0)),
 
-              ListTile(
-                minVerticalPadding: 20.0,
-                title: Text('지불 방법 추가',
-                    textAlign: TextAlign.center,
-                    style:TextStyle(color:Colors.black,
-                      fontSize:18,
-                      fontWeight: FontWeight.w600,
-                    )) ,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder:(context) => addpayPage(),),
-                  );
-                },),
-              Container(width: 500,
-                  child: Divider(
-                      height: 0.0,
-                      color: Colors.black12, thickness: 1.0)),
-
-            ],
-          )
-      : isLoading
-        ? Center(
-        child: CircularProgressIndicator(),
-    )
+        ],
+      )
+          :
+     isLoading
+        ?
+          Center(child: CircularProgressIndicator(),)
         : SingleChildScrollView(
         child: Column(
           children: [

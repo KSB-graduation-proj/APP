@@ -17,30 +17,7 @@ class QrScan extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: const Text('  Coop Go Admin',
-              style:TextStyle(color:Color(0xff2eb67d),
-                  fontSize:20,
-                  fontWeight: FontWeight.w500)),
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-          centerTitle: true,
-          leading:
-          Builder(builder: (context){
-            return
-              IconButton(
-                icon: Icon(Icons.menu),
-                onPressed: (){
-                },
-                color: Color(0xff2eb67d),
-              );
-          }),
-          actions: [IconButton(onPressed: () {
-        FirebaseAuth.instance.signOut();
-        }, icon: Icon(Icons.logout),
-            color: Color(0xff2eb67d),)
-          ],
-      ),
+
       body: Center(
         child:
              QRViewExample(),

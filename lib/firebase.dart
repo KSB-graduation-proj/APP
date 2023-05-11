@@ -1,11 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+
+var email = updateEmail();
+
 final _auth = FirebaseAuth.instance;
 final firestore = FirebaseFirestore.instance;
 
-var email = _auth.currentUser!.email.toString();
+updateEmail() {
+  if (_auth.currentUser!= null) {
+    email = _auth.currentUser!.email.toString();
+  } else {
+    email = null;
+  }
+  return email;
+}
+
 var code = email.replaceFirst('@ewhain.net', '');
+
 
 setTime(){
   DateTime date2 = new DateTime.now();

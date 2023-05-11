@@ -19,7 +19,7 @@ class _refundInfo extends State<refundInfo> {
   List<dynamic> time=[];
   List<dynamic> isRefunded=[];
   List<dynamic> totalPrice=[];
-  bool noData = true;
+  bool noData = false;
 
   @override
   void initState() {
@@ -42,27 +42,31 @@ class _refundInfo extends State<refundInfo> {
 
     {
       setState(() {
-        final data = doc.data() as Map<String,dynamic>; // 모든 영수증 데이터
-        List<String>? bill = keytoList(data.keys);
-        print('bill:$bill');
-        for(int i=0; i< bill!.length ;i++) {
-          paymentId.add(bill![i]);
-          var bill1 = data[bill![i]]; // 모든 결제번호 데이터
+        if(doc.data()==null){
+          noData=true;
+        }
+        else{
+          final data = doc.data() as Map<String,dynamic>; // 모든 영수증 데이터
+          List<String>? bill = keytoList(data.keys);
+          print('bill:$bill');
+          for(int i=0; i< bill!.length ;i++) {
+            paymentId.add(bill![i]);
+            var bill1 = data[bill![i]]; // 모든 결제번호 데이터
 
-          var orderId1 =bill1!['orderId'].toString();
-          orderId.add(orderId1);
-          String date1 = orderId1.substring(8);
-          String formatDate =
-              "${date1.substring(0, 2)}/${date1.substring(2, 4)}/${date1.substring(4, 6)} ${date1.substring(6, 8)}:${date1.substring(8, 10)}:${date1.substring(10)}";
-          print(formatDate);
-          time.add(formatDate);
-          var isRefunded1 = bill1['isRefunded'];
-          isRefunded.add(isRefunded1);
-          var totalPrice1 = bill1['totalPrice'];
-          var f = NumberFormat("#,###");
-          totalPrice.add(f.format(totalPrice1));
-          noData = false;
-        }print('$orderId,$paymentId, $time,$totalPrice');
+            var orderId1 =bill1!['orderId'].toString();
+            orderId.add(orderId1);
+            String date1 = orderId1.substring(8);
+            String formatDate =
+                "${date1.substring(0, 2)}/${date1.substring(2, 4)}/${date1.substring(4, 6)} ${date1.substring(6, 8)}:${date1.substring(8, 10)}:${date1.substring(10)}";
+            print(formatDate);
+            time.add(formatDate);
+            var isRefunded1 = bill1['isRefunded'];
+            isRefunded.add(isRefunded1);
+            var totalPrice1 = bill1['totalPrice'];
+            var f = NumberFormat("#,###");
+            totalPrice.add(f.format(totalPrice1));}
+        }
+        print('$orderId,$paymentId, $time,$totalPrice');
       });
     },);
 
