@@ -1,7 +1,7 @@
 # Coop-Go APP
 coop-go 앱 개발 repository
 </br>
-"front" brunch에서 현재 진행상황 확인 가능 : https://github.com/KSB-graduation-proj/APP/blob/front/README.md
+"flutterfire" brunch에서 현재 진행상황 확인 가능 : https://github.com/KSB-graduation-proj/APP/blob/flutterfire/README.md
 
 <h3>시연영상</h3>
 coop-go 시연영상 유튜브 링크 : https://www.youtube.com/watch?v=ExPrby0-4T8
@@ -67,7 +67,7 @@ QR 인식으로 사용자 관리</br>
 
 ## 팀원
 Coop-go app 개발 팀원
-|방현수|방현수|
-|:---:|:---:|
-|Frontend|Backend|
+|방현수|
+|:---:|
+|Frontend&Backend|
 
