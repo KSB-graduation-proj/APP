@@ -56,6 +56,7 @@ class _askqnaPage extends State<askqnaPage> {
           noData=true;
         }
         else{
+          code = email.replaceFirst('@ewhain.net', '');
           list.clear();
           final data = doc.data() as Map<String, dynamic>;
           orderNo = keytoList(data.keys); //주문번호 저장

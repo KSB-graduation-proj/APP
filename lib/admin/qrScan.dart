@@ -34,6 +34,13 @@ class QRViewExample extends StatefulWidget {
 }
 
 class _QRViewExampleState extends State<QRViewExample> {
+
+  @override
+  void dispose() {
+    controller?.dispose(); // 카메라 컨트롤러 중지
+    super.dispose();
+  }
+
   Barcode? result;
   var date;
   QRViewController? controller;
@@ -190,10 +197,5 @@ class _QRViewExampleState extends State<QRViewExample> {
     }
   }
 
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
-    print("dispose");
-  }
+
 }

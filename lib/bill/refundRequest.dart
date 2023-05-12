@@ -60,6 +60,7 @@ class _refundRequest extends State<refundRequest> {
     doc.get().then((DocumentSnapshot doc)
     {
       setState(() {
+        code = email.replaceFirst('@ewhain.net', '');
         list.clear();
         list2.clear();
         final data = doc.data() as Map<String,dynamic>; // 모든 영수증 데이터

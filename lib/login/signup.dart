@@ -16,6 +16,9 @@ class _signupPage extends State<signupPage> {
   String? email;
   String? password;
   String? repassword;
+  String? number;
+  String? company;
+  String? date;
 
 
   @override
@@ -36,17 +39,23 @@ class _signupPage extends State<signupPage> {
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Column(
-          //mainAxisAlignment: MainAxisAlignment.center,
-          //crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-          SizedBox(height: 80,),
+          SizedBox(height: 40,),
+            Row(children:[
+              SizedBox(width: 25,),
+              Text("Coop-Go 회원 정보를 등록하세요.",
+                  style:TextStyle(color:Color(0xff2eb67d),
+                      fontSize:17,
+                      fontWeight: FontWeight.w600)),],
+            ),
+            SizedBox(height: 10,),
             CustomTextField(label: "Name", onChangefunc: (newText){name= newText;}, isPassword: false,),
             SizedBox(height: 5,),
             CustomTextField(label: "Email" ,onChangefunc: (newText){email= newText;}, isPassword: false,),
             Row(
               children: [
                 SizedBox(width: 30,),
-                Text('학번@ewhain.net 형태로 입력하세요.',style: TextStyle(color: Colors.grey),),
+                Text('학번7자리@ewhain.net 형태로 입력하세요.',style: TextStyle(color: Colors.grey),),
 
               ],
             ),
@@ -69,14 +78,102 @@ class _signupPage extends State<signupPage> {
                       _isChecked = value;
                     });}),
             ],),
+            SizedBox(height: 40,),
+            Row(children:[
+              SizedBox(width: 25,),
+              Text("Coop-Go 기본 결제 수단을 등록하세요.",
+                  style:TextStyle(color:Color(0xff2eb67d),
+                      fontSize:17,
+                      fontWeight: FontWeight.w600)),],
+            ),
+            SizedBox(height: 20,),
+            Container(width: 380,
+                child: Divider(
+                    height: 0.0,
+                    color: Colors.black12, thickness: 1.0)),
+            SizedBox(height: 10,),
+            SizedBox(height: 10,),
+            Row(children:[
+              SizedBox(width: 25,),
+              Text("카드사",
+                  style:TextStyle(color:Colors.black54,
+                      fontSize:17,
+                      fontWeight: FontWeight.w600)),
+              SizedBox(width: 75,),
+              SizedBox(width:200,
+                child:TextField(
+                  onChanged: (newText){company=newText;},
+                  maxLines: 1,
+                  minLines: 1,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: 10.0),
+                    border: InputBorder.none,
+                    hintText: '카드사',
+                    labelStyle: TextStyle(color: Color(0xff2eb67d), ),
+                  ),
+                ), )
+            ],
+            ),
+            Row(children:[
+              SizedBox(width: 25,),
+              Text("카드 번호",
+                  style:TextStyle(color:Colors.black54,
+                      fontSize:17,
+                      fontWeight: FontWeight.w600)),
+              SizedBox(width: 55,),
+              SizedBox(width:200,
+                child:TextField(
+                  onChanged: (newText){number=newText;},
+                  keyboardType: TextInputType.number,
+                  maxLines: 1,
+                  minLines: 1,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: 10.0),
+                    border: InputBorder.none,
+                    hintText: '0000-0000-0000-0000',
+                    labelStyle: TextStyle(color: Color(0xff2eb67d), ),
+                  ),
+                ), )
+            ],
+            ),
+            Row(children:[
+              SizedBox(width: 25,),
+              Text("만료일",
+                  style:TextStyle(color:Colors.black54,
+                      fontSize:17,
+                      fontWeight: FontWeight.w600)),
+              SizedBox(width: 75,),
+              SizedBox(width:200,
+                child:TextField(
+                  onChanged: (newText){date=newText;},
+                  keyboardType: TextInputType.datetime,
+                  maxLines: 1,
+                  minLines: 1,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: 10.0),
+                    border: InputBorder.none,
+                    hintText: 'YYYY / MM',
+                    labelStyle: TextStyle(color: Color(0xff2eb67d), ),
+                  ),
+                ), )
+            ],
+            ),
+            SizedBox(height:15),
+            Container(width: 380,
+                child: Divider(
+                    height: 0.0,
+                    color: Colors.black12, thickness: 1.0)),
             SizedBox(height: 50,),
-        ElevatedButton(
+            ElevatedButton(
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
             backgroundColor: Color(0xff2eb67d),
-            padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 70.0),
-            textStyle: const TextStyle(fontSize: 20,
-                fontWeight: FontWeight.bold),
+            padding: const EdgeInsets.symmetric(vertical: 15.0,horizontal: 70.0),
+            textStyle: const TextStyle(fontSize: 15,
+                fontWeight: FontWeight.w500),
           ),
           onPressed: () async{
             if(password != repassword){
@@ -87,8 +184,18 @@ class _signupPage extends State<signupPage> {
                       actions: [TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text("OK"))],
                     );
                   });
-            }else{
-              if(name!=null && email !=null && password !=null){
+            }
+            else if(number==null||company==null||date==null){
+              showDialog(context: context,
+                  builder: (context){
+                    return AlertDialog(
+                      content: Text("카드 정보를 모두 입력하세요."),
+                      actions: [TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('OK'))],
+                    );
+                  });
+            }
+            else{
+              if(name!=null && email !=null && password !=null && number!=null && company!=null&&date!=null){
                 try{
                   UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
                       email: email!,
@@ -96,13 +203,27 @@ class _signupPage extends State<signupPage> {
                   );
                   FirebaseFirestore firestore = FirebaseFirestore.instance;
                   final member = firestore.collection("member");
-                  final data = <String, dynamic>{'coopMember': _isChecked,
+                  final data = <String, dynamic>{
+                    'coopMember': _isChecked,
                     'email':email,
                     'id': email.toString().replaceFirst('@ewhain.net', ''),
                     'name':name,
                     'password':password,
                   };
                   member.doc(email).set(data);
+                  final card = firestore.collection("card");
+                  final id = '${company}_${number}';
+                  final data2 = <String, dynamic>
+                  {
+                    '${id}': {
+                      'exdate': date,
+                      'company': company,
+                      'number': number,
+                      'default': true,
+                      'balance': 50000,//임시 결제수단이라 임의로 잔액설정
+                    } };
+                  card.doc(email).set(data2, SetOptions(merge: true));
+
                   /*firestore.collection('member').add(
                       {'coopMember': _isChecked,
                         'email':email,
@@ -142,7 +263,6 @@ class _signupPage extends State<signupPage> {
                           );
                         });
                   }
-
                 }catch(e){
                   print(e);
                 }
@@ -151,9 +271,10 @@ class _signupPage extends State<signupPage> {
           },
           child:  Container(
             width: 210,
-            child: const Text('회원가입', textAlign: TextAlign.center,),
+            child: const Text('Sign up', textAlign: TextAlign.center,),
           )
         ),
+            SizedBox(height: 30,),
 
           ],
         ),

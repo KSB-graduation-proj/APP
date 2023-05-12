@@ -20,7 +20,10 @@ class _quitPage extends State<quitPage>{
 
     // 현재 인증된 사용자 가져오기
     User? user = auth.currentUser;
-
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder:(context) => loginPage(),),
+    );
     if (user != null) {
       // 사용자의 비밀번호 재인증
       AuthCredential credential = EmailAuthProvider.credential(email: user.email!, password: password);

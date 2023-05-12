@@ -11,6 +11,8 @@ import 'package:app_test/Setting/qna/QnA.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'login/login.dart';
+
 
 
 class Home extends StatefulWidget {
@@ -127,6 +129,10 @@ class _Home extends State<Home> {
                             title: Text('Logout'),
                             onTap: () {
                               FirebaseAuth.instance.signOut();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder:(context) => loginPage(),),
+                              );
                             }
                         ),
                       ],
@@ -154,6 +160,10 @@ class _Home extends State<Home> {
                     }),
                     actions: [IconButton(onPressed: () {
                       FirebaseAuth.instance.signOut();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder:(context) => loginPage(),),
+                      );
                     }, icon: Icon(Icons.logout),
                       color: Color(0xff2eb67d),)
                     ],

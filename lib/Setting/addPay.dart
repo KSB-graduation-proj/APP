@@ -206,6 +206,7 @@ class _addpayPage extends State<addpayPage>{
                                   'company': company,
                                   'number': number,
                                   'default': false,
+                                  'balance': 50000,//임시 결제수단이라 임의로 잔액설정
                                 } };
                               card.doc(email).set(data, SetOptions(merge: true));
                               showDialog<String>(

@@ -42,18 +42,41 @@ exports.paymentFunction = functions.firestore
         const paymentID = "p"+orderID;
         const point = totalSum * 0.05;
         const PaymentDoc = admin.firestore().collection("payment").doc(email);
-        await PaymentDoc.update({
-          [paymentID]: {
-            isPaid: paid,
-            isRefunded: false,
-            buy: goods,
-            card: {
-              number: cardNumber,
-              company: cardCompany},
-            orderId: orderID,
-            point: point,
-            totalPrice: totalSum},
-        });
+        try {
+          const docSnapshot = await PaymentDoc.get();
+          if (docSnapshot.exists) {
+            // 문서가 이미 존재하는 경우 업데이트
+            await PaymentDoc.update({
+              [paymentID]: {
+                isPaid: paid,
+                isRefunded: false,
+                buy: goods,
+                card: {
+                  number: cardNumber,
+                  company: cardCompany},
+                orderId: orderID,
+                point: point,
+                totalPrice: totalSum},
+            });
+          } else {
+            // 문서가 존재하지 않는 경우 생성 후 필드 값 저장
+            await PaymentDoc.set({
+              [paymentID]: {
+                isPaid: paid,
+                isRefunded: false,
+                buy: goods,
+                card: {
+                  number: cardNumber,
+                  company: cardCompany},
+                orderId: orderID,
+                point: point,
+                totalPrice: totalSum},
+            });
+          }
+        } catch (error) {
+          console.error("Error processing detection:", error);
+          return null;
+        }
       } else {
         console.log(`Card document with email ${email} does not exist`);
       }

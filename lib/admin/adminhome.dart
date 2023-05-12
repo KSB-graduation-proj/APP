@@ -1,16 +1,8 @@
-import 'dart:async';
-
 import 'package:app_test/admin/qrScan.dart';
 import 'package:app_test/admin/refundList.dart';
 import 'package:app_test/admin/viewQnaList.dart';
-import 'package:app_test/firebase.dart';
-import 'package:app_test/pages/point.dart';
 import 'package:flutter/material.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-
 
 class adminHome extends StatefulWidget {
   const adminHome({super.key});
@@ -23,16 +15,9 @@ class _adminHome extends State<adminHome> {
 
   int _selectedIndex = 0;
 
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  String? name;
-  bool? coopMember;
-  String? coop;
-
-  StreamSubscription<QuerySnapshot>? _subscription;
-
   static const List<Widget> _widgetOptions = <Widget>[
-    QrScan(),
     refundPage(),
+    QrScan(),
     viewQnaPage(),
   ];
 
@@ -41,13 +26,11 @@ class _adminHome extends State<adminHome> {
     super.initState();
   }
 
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
-
 
   Widget build (BuildContext context) {
     return
@@ -74,7 +57,7 @@ class _adminHome extends State<adminHome> {
                               )),
                         ),
                         ListTile(
-                          title: Text('1:1 문의'),
+                          title: Text('Settings'),
                           onTap: () {
 
                           },
@@ -143,16 +126,17 @@ class _adminHome extends State<adminHome> {
           child: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: Icon(Icons.qr_code),
-                label: 'Home',
+                icon: Icon(Icons.inbox_rounded),
+                label: 'Refund',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.inbox_rounded),
-                label: 'refund',
+                icon: Icon(Icons.qr_code),
+                label: 'QrScan',
+
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.question_answer),
-                label: 'qna',
+                label: 'QnA',
               ),
             ],
             currentIndex: _selectedIndex,

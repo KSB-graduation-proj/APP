@@ -49,9 +49,23 @@ exports.orderFunction = functions.firestore
         // 주문 정보를 저장
         const email = detectID.substring(0, 7) + "@ewhain.net";
         const orderDoc = db.collection("order").doc(email);
-        await orderDoc.update({
-          [detectID]: goods,
-        });
+        try {
+          const docSnapshot = await orderDoc.get();
+          if (docSnapshot.exists) {
+            // 문서가 이미 존재하는 경우 업데이트
+            await orderDoc.update({
+              [detectID]: goods,
+            });
+          } else {
+            // 문서가 존재하지 않는 경우 생성 후 필드 값 저장
+            await orderDoc.set({
+              [detectID]: goods,
+            });
+          }
+        } catch (error) {
+          console.error("Error processing detection:", error);
+          return null;
+        }
       } catch (error) {
         console.error("Error processing detection: ", error);
         return null;
