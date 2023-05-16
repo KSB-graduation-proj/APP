@@ -13,7 +13,7 @@ class _pointPage extends State<pointPage> {
   int? point;
   bool? coopMember;
   bool isLoading = true;
-  bool noData = true;
+  bool noData = false;
 
   void initState() {
     super.initState();
@@ -22,15 +22,17 @@ class _pointPage extends State<pointPage> {
 
   void setData() {
     final doc = firestore.collection('memberCoop').doc("${email}");
-    if(doc!=null){
-      noData = false;
-    }
     doc.get().then((DocumentSnapshot doc) {
       setState(() {
-        final data = doc.data() as Map<String, dynamic>;
-        point = data['point'];
-        coopMember = data['coopMember'];
-        isLoading = false;
+        if(doc.data()==null){
+          noData = true;
+        }else{
+          final data = doc.data() as Map<String, dynamic>;
+          point = data['point'];
+          coopMember = data['coopMember'];
+          isLoading = false;
+        }
+
 
       });
     },);
