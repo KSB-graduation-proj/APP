@@ -1,3 +1,4 @@
+import 'package:app_test/admin/refundDetail.dart';
 import 'package:app_test/firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,34 +41,36 @@ class _refundPage extends State<refundPage> {
   }
 
   void setData() {
-    FirebaseFirestore.instance
-        .collection('refundRequest')
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((DocumentSnapshot documentSnapshot) {
-        Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-        data.forEach((refundID, data) {
-          refundIDList.add(refundID);
-          reasonList.add(data['reason']);
-          orderIdList.add(data['orderId']);
-          paymentIdList.add(data['paymentId']);
-          detailList.add(data['detail']);
-          errorProductList.add(data['errorProduct']);
-          numberList.add(data['card']['number']);
-          companyList.add(data['card']['company']);
-          String id = data['orderId'].substring(0, 7);
-          idList.add(id);
+    FirebaseFirestore.instance.collection('refundRequest').get()
+        .then((QuerySnapshot querySnapshot)
+    {
+      setState((){
+        querySnapshot.docs.forEach((DocumentSnapshot documentSnapshot) {
+          Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+          data.forEach((refundID, data) {
+            refundIDList.add(refundID);
+            reasonList.add(data['reason']);
+            orderIdList.add(data['orderId']);
+            paymentIdList.add(data['paymentId']);
+            detailList.add(data['detail']);
+            errorProductList.add(data['errorProduct']);
+            numberList.add(data['card']['number']);
+            companyList.add(data['card']['company']);
+            String id = data['orderId'].substring(0, 7);
+            idList.add(id);
 
-          // 'reason'이 '물품 인식 오류'인 경우에 대해서만 오류 데이터 리스트에 저장
-          if (data['reason'] == '물품 인식 오류') {
-            error_refundIDList.add(refundID);
-            error_orderIdList.add(data['orderId']);
-            error_paymentIdList.add(data['paymentId']);
-            error_detailList.add(data['detail']);
-            error_numberList.add(data['card']['number']);
-            error_companyList.add(data['card']['company']);
-          }
-          isLoading = false;
+            // 'reason'이 '물품 인식 오류'인 경우에 대해서만 오류 데이터 리스트에 저장
+            if (data['reason'] == '물품 인식 오류') {
+              error_refundIDList.add(refundID);
+              error_orderIdList.add(data['orderId']);
+              error_paymentIdList.add(data['paymentId']);
+              error_detailList.add(data['detail']);
+              error_numberList.add(data['card']['number']);
+              error_companyList.add(data['card']['company']);
+            }
+            isLoading = false;
+      });
+
         });
       });
     });}
@@ -83,9 +86,9 @@ class _refundPage extends State<refundPage> {
           child: Column(
              children:[
               SizedBox(height: 20.0,),
-              Text('환불 리스트', textAlign: TextAlign.center,
+              Text('환불 요청 내역', textAlign: TextAlign.start,
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
@@ -141,7 +144,7 @@ class _refundDescription extends StatelessWidget {
             children: <Widget>[
 
               Expanded(
-                flex: 3,
+                flex: 2,
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -170,14 +173,14 @@ class _refundDescription extends StatelessWidget {
 
                     ]),),
               Expanded(
-                flex: 4,
+                flex: 2,
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       const SizedBox(width: 20),
                       Text(
-                        title,
+                        '$title',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
@@ -187,7 +190,7 @@ class _refundDescription extends StatelessWidget {
                       ),
                     ]),),
               Expanded(
-                flex: 3,
+                flex: 1,
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -206,7 +209,7 @@ class _refundDescription extends StatelessWidget {
                     ]),),
               SizedBox(height: 5),
               Expanded(
-                flex: 6,
+                flex: 3,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -223,6 +226,10 @@ class _refundDescription extends StatelessWidget {
                               fontWeight: FontWeight.bold),
                         ),
                         onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder:(context) => refundDetailPage(title)),//orderno전달해서 화면 이어지게
+                          );
                         },
                         child: const Text('상세보기'),
                       ),
@@ -237,7 +244,10 @@ class _refundDescription extends StatelessWidget {
                               fontWeight: FontWeight.bold),
                         ),
                         onPressed: () {
-
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder:(context) => refundDetailPage(title)),//orderno전달해서 화면 이어지게
+                          );
                         },
                         child: const Text('상세보기'),
                       ),
@@ -268,14 +278,6 @@ class _refundDescription extends StatelessWidget {
                   ],
                 ),
               ),
-              Expanded(
-                  flex:1,
-                  child: Column(
-                      children: <Widget>[
-                        //const SizedBox(width: 10),
-                      ]
-                  )
-              )
             ],
 
           ),
@@ -305,7 +307,7 @@ class CustomListItemTwo extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(1.0),
       child: SizedBox(
-        height: 160,
+        height: 142,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
