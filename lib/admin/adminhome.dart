@@ -56,12 +56,7 @@ class _adminHome extends State<adminHome> {
                                 bottomRight: Radius.circular(35),
                               )),
                         ),
-                        ListTile(
-                          title: Text('Settings'),
-                          onTap: () {
 
-                          },
-                        ),
                         ListTile(
                             title: Text('Logout'),
                             onTap: () {
@@ -110,7 +105,9 @@ class _adminHome extends State<adminHome> {
 
   Widget get bottomNavigationBar {
     return Container(
+
         decoration: BoxDecoration(
+          color: Colors.transparent,
           borderRadius: BorderRadius.only(
               topRight: Radius.circular(33), topLeft: Radius.circular(33)),
           boxShadow: [
@@ -124,6 +121,7 @@ class _adminHome extends State<adminHome> {
           ),
 
           child: BottomNavigationBar(
+
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.inbox_rounded),

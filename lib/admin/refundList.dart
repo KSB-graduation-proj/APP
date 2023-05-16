@@ -1,8 +1,7 @@
 import 'package:app_test/admin/refundDetail.dart';
-import 'package:app_test/firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:app_test/admin/qrScan.dart';
+
 class refundPage extends StatefulWidget {
   const refundPage({super.key});
 
@@ -82,36 +81,50 @@ class _refundPage extends State<refundPage> {
             ? Center(
           child: CircularProgressIndicator(),
         )
-            : SingleChildScrollView(
-          child: Column(
-             children:[
-              SizedBox(height: 20.0,),
-              Text('환불 요청 내역', textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(height: 10.0,),
-              Column(
-                children: [
-                  for (int i=0;i<refundIDList.length;i++)...[
-                      CustomListItemTwo(
-                        paymentno: '${paymentIdList[i]}',
-                        title: '${refundIDList[i]} ',
-                        orderno: '${orderIdList[i]}',
-                        reason: '${reasonList[i]}',
-                        id: '${idList[i]}',
-                      ),
-                  ]
+            : Scaffold(
+          backgroundColor: Colors.transparent,
+          body:
+            SingleChildScrollView(
+
+              child: Column(
+                children:[
+                  SizedBox(height: 5.0,),
+                  Container(width: 700,
+                      child: Divider(
+                          height: 0.0,
+                          color: Color(0xfff4f2f6), thickness: 5.0)),
+                  SizedBox(height: 15.0,),
+                  Row(
+                      children:[
+                        SizedBox(width: 20,),
+                        Text('환불 요청 내역', textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),]),
+                  SizedBox(height: 10.0,),
+                  Column(
+                    children: [
+                      for (int i=0;i<refundIDList.length;i++)...[
+                        CustomListItemTwo(
+                          paymentno: '${paymentIdList[i]}',
+                          title: '${refundIDList[i]} ',
+                          orderno: '${orderIdList[i]}',
+                          reason: '${reasonList[i]}',
+                          id: '${idList[i]}',
+                        ),
+                      ]
+                    ],
+
+                  )
                 ],
+              ),
 
-              )
-            ],
-          ),
-
+            ),
         );
+
     }
 
 }
@@ -136,7 +149,7 @@ class _refundDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         child: Card(
-          margin: EdgeInsets.fromLTRB(12.0, 8.0, 12.0,2.0),
+          margin: EdgeInsets.fromLTRB(10.0, 8.0, 10.0,2.0),
           color: Color(0xfffbfbfb),
           elevation:1,
           child: Column(
