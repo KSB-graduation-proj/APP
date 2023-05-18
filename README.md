@@ -53,14 +53,6 @@ main.dart
    - qnaDetail.dart
    - QnAList.dart
 
-home: 홈 화면 기본틀 + 좌측 네비게이션 바 </br>
-<h4> pages </h4>
-mainPage: 메인화면, QR 생성 </br>
-myPage: 마이페이지, 영수증 모아보기 </br>
-settingsPage: 세팅페이지, 환경설정 </br>
-<h4> bill </h4>
-bill: 개별 </br>
-refundRequest: 환불 요청 </br>
 
 ## 파일 설명
 
