@@ -79,7 +79,7 @@ QR 인식으로 사용자 관리</br>
 <img src = https://user-images.githubusercontent.com/90560533/204531213-05b78ce9-c3fc-416c-aaab-13942cb8cb83.png width="60%" height="60%">
 
 ## 프로젝트 예상 아키텍쳐
-<img src = https://user-images.githubusercontent.com/990560533/e2e0f848-640c-419e-9ee4-c8fa8fc8099a.png width="60%" height="60%">
+![아키텍쳐](https://github.com/KSB-graduation-proj/APP/assets/90560533/21b4a76c-094a-4901-a8df-fdadffe8bcac)
 
 ## 팀원
 Coop-go app 개발 팀원
