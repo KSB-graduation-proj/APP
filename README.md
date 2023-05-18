@@ -13,6 +13,16 @@ coop-go 시연영상 유튜브 링크 : https://www.youtube.com/watch?v=ExPrby0-
 <img src="https://img.shields.io/badge/Flutter-blue?style=for-the-badge&logo=Flutter&logoColor=black"/></a>
 <img src="https://img.shields.io/badge/Dart-orange?style=for-the-badge&logo=Dart&logoColor=black"/></a>
 <img src="https://img.shields.io/badge/Firebase-yellow?style=for-the-badge&logo=Firebase&logoColor=black"/></a>
+<img src="https://img.shields.io/badge/Node.js-green?style=for-the-badge&logo=Node.js&logoColor=white"/></a>
+
+## 사용 기술
+- 앱: flutter
+- 데이터베이스: firebase firestore
+- 백엔드 서버: firebase functions 
+
+## 프로젝트 목적
+본 프로젝트에서는 이화여자대학교 아산공학관 매점이 공간 특성상 쉬는 시간같은 일정 시간대에는 사람이 붐비어 결제를 하기 위한 줄을 과도하게 길게 선다는 문제점을 인식했다. 따라서, 물건 구매 과정 중 결제 과정을 자동화하여 줄을 서는 시간을 단축시키기 위한 방법을 고안해 이 문제를 해결하고자 한다.
+
 
 ## 프로젝트 개발배경
 1. 구매 실패 문제 발생</br> 
@@ -23,8 +33,7 @@ coop-go 시연영상 유튜브 링크 : https://www.youtube.com/watch?v=ExPrby0-
 
 → 줄 대기 시간 및 혼잡도 감소를 위한 물건 결제 시간 단축의 필요성 인지</br>
 
-## 프로젝트 목적
-본 프로젝트에서는 이화여자대학교 아산공학관 매점이 공간 특성상 쉬는 시간같은 일정 시간대에는 사람이 붐비어 결제를 하기 위한 줄을 과도하게 길게 선다는 문제점을 인식했다. 따라서, 물건 구매 과정 중 결제 과정을 자동화하여 줄을 서는 시간을 단축시키기 위한 방법을 고안해 이 문제를 해결하고자 한다.
+
 
 ## 유사 서비스 
 
@@ -32,13 +41,21 @@ coop-go 시연영상 유튜브 링크 : https://www.youtube.com/watch?v=ExPrby0-
 
 2. 셀프 바코드 계산대는 고객이 제품의 바코드를 스캔하여 가격을 계산하고, 결제하는 시스템이다. 이를 위해 매장 내에는 바코드 스캐너와 결제 시스템이 설치되어 있다.</br>
 
-Coop-Go 서비스의 차별성: Amazon Go와 달리 센서인식은 도입하지 않고 카메라가 달린 계산대에 물체를 인식시키는 과정을 추가해 Amazon Go가 소비하는 수많은 카메라와 센서인식 비용을 줄여 현실적인 실효성을 확보했다. 또한 셀프 계산대와 다르게 바코드를 태깅하는 번거로움을 없앴고 비교적 간단한 방식으로 인해 소비자의 편의를 확보했다.</br>
+Coop-Go 서비스의 차별성:
+
+# 비용 효율성
+
+Amazon Go와 달리 센서인식은 도입하지 않고 카메라가 달린 계산대에 물체를 인식시키는 과정을 추가해 Amazon Go가 소비하는 수많은 카메라와 센서인식 비용을 줄여 현실적인 실효성을 확보했다. 
+
+# 간편한 사용방식
+
+셀프 계산대와 다르게 바코드를 태깅하는 번거로움을 없앴고 비교적 간단한 방식으로 인해 소비자의 편의를 확보했다.</br>
 
 ## 소개
 <h3> COOP-GO </h3>
 : 대학생을 대상으로 교내 매점 계산대의 카메라를 통해 실시간으로 객체인식을 진행하여 결제 물건을 판단하고 모바일 앱에서 해당 물건의 결제 및 영수증을 발급하는 서비스
 </br>
-Just GRAP, SCAN, and GO! 
+# Just GRAP, SCAN, and GO! 
 </br>
 사용자는 물건을 집어 계산대에 올려둔 후, QR을 스캔하고, 그냥 매점 밖으로 나가면 된다.
 결제는 앱에서 미리 등록해둔 결제 수단으로 진행되며 결제 영수증은 결제 이후 1분 이내로 발급된다.
@@ -59,7 +76,7 @@ https://dontvisit.tistory.com/49 : 서동은[AI-Raspberry pi]</br>
 <h3> Coop-go Application </h3>
 : QR스캔 및 영수증 발급을 위한 애플리케이션
 </br>
-회원 정보 등록/관리 및 사용자 인식을 위한 QR 생성/인식, 전자영수증 발급 기능을 탑재한 애플리케이션
+회원 정보 등록/관리 및 사용자 인식을 위한 QR 생성/인식, 결제영수증 발급, 환불 및 문의 등록 기능 등을 탑재한 애플리케이션
 </br>
 Coop-go 서비스 사용자 및 관리자는 필수적으로 애플리케이션 설치가 요구된다.
 </br>
@@ -78,7 +95,7 @@ QR 인식으로 사용자 관리</br>
 ## Prototype
 <img src = https://user-images.githubusercontent.com/90560533/204531213-05b78ce9-c3fc-416c-aaab-13942cb8cb83.png width="60%" height="60%">
 
-## 프로젝트 예상 아키텍쳐
+## 시스템 아키텍쳐
 ![아키텍쳐](https://github.com/KSB-graduation-proj/APP/assets/90560533/21b4a76c-094a-4901-a8df-fdadffe8bcac)
 
 ## 팀원
