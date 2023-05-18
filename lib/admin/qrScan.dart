@@ -35,12 +35,6 @@ class QRViewExample extends StatefulWidget {
 
 class _QRViewExampleState extends State<QRViewExample> {
 
-  @override
-  void dispose() {
-    controller?.dispose(); // 카메라 컨트롤러 중지
-    super.dispose();
-  }
-
   Barcode? result;
   var date;
   QRViewController? controller;
@@ -151,21 +145,19 @@ class _QRViewExampleState extends State<QRViewExample> {
         res=scanData.code;
         print('$res, $preScanData');
 
-        if(res != preScanData){
-          preScanData=res;
+        if(res != preScanData) {
+          preScanData = res;
           _scanDataNotifier.value = res;
-          setQR();
+          setState(() {
+            result = scanData;
+            DateTime date2 = DateTime.now();
+            date2 = date2.toUtc().add(Duration(hours: 9));
+            date = DateFormat('yyyy-MM-dd HH:mm:ss').format(date2);
+            dateDataString = DateFormat('yyMMddHHmmss').format(date2);
+            dateData = int.parse(dateDataString!);
+            setQR();
+          });
         }
-
-        setState(() {
-          result = scanData;
-          DateTime date2 = new DateTime.now();
-          date2 = date2.toUtc().add(Duration(hours:9));
-          date = DateFormat('yyyy-MM-dd HH:mm:ss').format(date2);
-          dateDataString = DateFormat('yyMMddHHmmss').format(date2);
-          dateData = int.parse(dateDataString!);
-
-        });
     });
     });
   }
@@ -176,7 +168,7 @@ class _QRViewExampleState extends State<QRViewExample> {
     print('qr dateD: $dateData');
     final qr = firestore.collection("qr");
     final id = res;
-    final time = dateDataString!.substring(0,6);
+    //final time = dateDataString!.substring(0,6);
     final qrTime = dateData.toString();
     final qrID = "${id}_${qrTime}";
     print(qrID);
@@ -197,5 +189,11 @@ class _QRViewExampleState extends State<QRViewExample> {
     }
   }
 
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+    print("dispose");
+  }
 
 }

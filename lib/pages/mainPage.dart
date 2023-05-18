@@ -22,6 +22,7 @@ class _mainPage extends State<mainPage> {
   }
 
   void setData() {
+    code = email.replaceFirst('@ewhain.net', '');
     final doc = firestore.collection('member').doc("${email}");
     doc.get().then((DocumentSnapshot doc) {
       setState(() {
