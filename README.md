@@ -17,7 +17,42 @@
 - flutter : 안드로이드 기반 coop-go 애플리케이션 제작을 위해 프레임워크 flutter 사용
 - firebase : noSQL DB firestore로 데이터 저장 및 noServer backend functions로 결제 함수 작성
 
-## 화면 소개
+## 파일 소개
+
+1. admin folder
+- adminhome.dart
+- qrScan.dart
+- refundDetail.dart
+- refundList.dart
+- viewQnaList.dart
+
+firebase.dart
+home.dart
+main.dart
+
+2. login folder
+- login.dart
+- quit.dart
+- signup.dart
+
+3. pages folder
+- mainPage.dart
+- myPage.dart
+- point.dart
+- settingsPage.dart
+
+4. bill folder
+- bill.dart
+- refundRequest.dart
+- refundRequest_insuffBal.dart
+
+5. Setting folder
+- qna folder
+   - askQnA.dart
+   - QnA.dart
+   - qnaDetail.dart
+   - QnAList.dart
+
 home: 홈 화면 기본틀 + 좌측 네비게이션 바 </br>
 <h4> pages </h4>
 mainPage: 메인화면, QR 생성 </br>
@@ -26,6 +61,8 @@ settingsPage: 세팅페이지, 환경설정 </br>
 <h4> bill </h4>
 bill: 개별 </br>
 refundRequest: 환불 요청 </br>
+
+## 파일 설명
 
 ## made by
 방현수
@@ -36,8 +73,6 @@ refundRequest: 환불 요청 </br>
 [Flutter Documentation]
    [https://flutter-ko.dev/docs/development/ui/widgets]
     
-[참고 사이트]
-   [https://dev-yakuza.posstree.com/ko/flutter/]
 
 
 
