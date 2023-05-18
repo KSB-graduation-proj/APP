@@ -1,7 +1,7 @@
 # Coop-Go APP
 coop-go 앱 개발 repository
 </br>
-"flutterfire" brunch에서 현재 진행상황 확인 가능 : https://github.com/KSB-graduation-proj/APP/blob/flutterfire/README.md
+"flutterfire" brunch에서 현재 앱개발 진행상황 확인 가능 : https://github.com/KSB-graduation-proj/APP/blob/flutterfire/README.md
 
 <h3>시연영상</h3>
 coop-go 시연영상 유튜브 링크 : https://www.youtube.com/watch?v=ExPrby0-4T8
@@ -14,17 +14,34 @@ coop-go 시연영상 유튜브 링크 : https://www.youtube.com/watch?v=ExPrby0-
 <img src="https://img.shields.io/badge/Dart-orange?style=for-the-badge&logo=Dart&logoColor=black"/></a>
 <img src="https://img.shields.io/badge/Firebase-yellow?style=for-the-badge&logo=Firebase&logoColor=black"/></a>
 
+## 프로젝트 개발배경
+1. 구매 실패 문제 발생</br> 
+교내 매점 이용자 90명 대상 설문조사 결과 매점 특정 시간대에 사람이 붐비어 구매 실패 경험이 있는 학생이 75%로 드러났다.</br>
+
+2. 대기 줄 문제</br>
+매점 이용 시 불편한 점으로 67%의 학생들이 줄이 길다는 문제를 선택했으며 64%의 학생들이 사람이 너무 많다는 점을 지적했다.</br>
+
+→ 줄 대기 시간 및 혼잡도 감소를 위한 물건 결제 시간 단축의 필요성 인지</br>
+
 ## 프로젝트 목적
-본 프로젝트에서는 이화여자대학교 아산공학관 매점이 특성상 쉬는 시간같은 일정 시간대에 사람이 붐비어 결제를 하기 위한 줄을 과도하게 길게 선다는 문제점을 인식했다. 따라서, 물건 구매 과정을 자동화하여 줄을 서는 시간을 최소한으로 단축시키기 위한  방법을 만들어 내 이 문제를 해결하고자 한다.
+본 프로젝트에서는 이화여자대학교 아산공학관 매점이 공간 특성상 쉬는 시간같은 일정 시간대에는 사람이 붐비어 결제를 하기 위한 줄을 과도하게 길게 선다는 문제점을 인식했다. 따라서, 물건 구매 과정 중 결제 과정을 자동화하여 줄을 서는 시간을 단축시키기 위한 방법을 고안해 이 문제를 해결하고자 한다.
+
+## 유사 서비스 
+
+1. Amazon Go는 인공지능 기술을 활용한 무인 매장으로, 구매한 제품의 정보를 자동으로 인식하여 계산하고, 결제가 완료되면 소비자는 매장을 나갈 수 있다. 이를 위해 고객은 모바일 앱을 다운로드하여 매장에 들어갈 때 자동으로 인식되는 QR 코드를 생성하고, 계산된 가격은 이 앱에서 확인할 수 있다. 이러한 Amazon Go의 장점은 1. 시간과 노력 절약, 2. 인공지능 기술을 활용해 정확한 계산이 가능, 3. 수많은 카메라와 센서로 행동을 추적하기 때문에 보안성이 높다. 약점은 1. 기술적인 문제 발생 시 서비스 중단, 2. 고객 개인정보 보호 우려, 3. 무인매장 특성상 상품 다양성 하락이 있다.</br>
+
+2. 셀프 바코드 계산대는 고객이 제품의 바코드를 스캔하여 가격을 계산하고, 결제하는 시스템이다. 이를 위해 매장 내에는 바코드 스캐너와 결제 시스템이 설치되어 있다. 셀프 계산대의 강점은 1. 고객 제품 선택의 자율성 확보, 2. 계산과 결제 과정 간편함, 3. 매장 직원의 역할 감소가 있으며 약점은 1. 스캔 과정에서의 오류, 2. 계산 과정에서 악의적 조정 가능, 3. 현금 계산 어려움이 있다.</br>
+
+Coop-Go 서비스의 차별성: Amazon Go와 달리 센서인식은 도입하지 않고 카메라가 달린 계산대에 물체를 인식시키는 과정을 추가해 Amazon Go가 소비하는 수많은 카메라와 센서인식 비용을 줄여 현실적인 실효성을 확보했다. 또한 셀프 계산대와 다르게 바코드를 태깅하는 번거로움을 없앴고 비교적 간단한 방식으로 인해 소비자의 편의를 확보했다.</br>
 
 ## 소개
 <h3> COOP-GO </h3>
-: Amazon-Go를 벤치마킹한 실시간 영상 객체인식을 통한 매점 자동결제 서비스
+: 대학생을 대상으로 교내 매점 계산대의 카메라를 통해 실시간으로 객체인식을 진행하여 결제 물건을 판단하고 모바일 앱에서 해당 물건의 결제 및 영수증을 발급하는 서비스
 </br>
 Just GRAP, SCAN, and GO! 
 </br>
 사용자는 물건을 집어 계산대에 올려둔 후, QR을 스캔하고, 그냥 매점 밖으로 나가면 된다.
-결제는 미리 등록해둔 결제 수단으로 진행되며 결제 영수증은 결제 이후 10분 이내로 발급된다.
+결제는 앱에서 미리 등록해둔 결제 수단으로 진행되며 결제 영수증은 결제 이후 1분 이내로 발급된다.
 
 <h3> COOP-GO organization </h3>
 https://github.com/KSB-graduation-proj
@@ -34,9 +51,9 @@ https://github.com/KSB-graduation-proj/APP : 어플 </br>
 https://github.com/KSB-graduation-proj/AI : 객체인식 모델
 
 <h3> 팀원 기술블로그 </h3>
-https://soobang-dev.tistory.com/category/졸업프로젝트/앱 : 방현수 </br>
-https://grdnr13.tistory.com/category/졸업%20프로젝트: 김정원 </br> 
-https://dontvisit.tistory.com/49 : 서동은 </br>
+https://soobang-dev.tistory.com/category/졸업프로젝트/앱 : 방현수[APP, Server] </br>
+https://grdnr13.tistory.com/category/졸업%20프로젝트: 김정원[AI-Model Trainig, Dataset Building]</br> 
+https://dontvisit.tistory.com/49 : 서동은[AI-Raspberry pi]</br>
 
 
 <h3> Coop-go Application </h3>
@@ -56,8 +73,7 @@ QR 생성으로 사용자 등록 & 인식 기능</br>
 
 <h3>[Manager ver.]</h3>
 QR 인식으로 사용자 관리</br>
-매점 결제 로그 모아보기</br>
-문의 검토</br>
+환불/1:1 문의 검토</br>
 
 ## Prototype
 <img src = https://user-images.githubusercontent.com/90560533/204531213-05b78ce9-c3fc-416c-aaab-13942cb8cb83.png width="60%" height="60%">
