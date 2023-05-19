@@ -65,6 +65,9 @@ class _refundInfo extends State<refundInfo> {
             var totalPrice1 = bill1['totalPrice'];
             var f = NumberFormat("#,###");
             totalPrice.add(f.format(totalPrice1));}
+          if (!isRefunded.contains(true)) {
+            noData = true;
+          }
         }
         print('$orderId,$paymentId, $time,$totalPrice');
       });
