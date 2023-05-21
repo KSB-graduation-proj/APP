@@ -18,6 +18,11 @@
 - firebase : noSQL DB firestore로 데이터 저장 및 noServer backend functions로 결제 함수 작성
 
 ## 파일 소개
+<br>
+firebase.dart
+home.dart
+main.dart
+<br>
 
 1. admin folder
 - adminhome.dart
@@ -26,9 +31,6 @@
 - refundList.dart
 - viewQnaList.dart
 
-firebase.dart
-home.dart
-main.dart
 
 2. login folder
 - login.dart
@@ -52,9 +54,22 @@ main.dart
    - QnA.dart
    - qnaDetail.dart
    - QnAList.dart
+- addPay.dart
+- pay.dart
+- profile.dart
+- refundBill.dart
+- refundInfo.dart
+
+6. functions folder
+- index.js
+- order.js
+- payment.js
+- refund.js
 
 
 ## 파일 설명
+
+## 보완할 점
 
 ## made by
 방현수
