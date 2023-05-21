@@ -98,6 +98,9 @@ QR 인식으로 사용자 관리</br>
 ## 시스템 아키텍쳐
 ![아키텍쳐](https://github.com/KSB-graduation-proj/APP/assets/90560533/21b4a76c-094a-4901-a8df-fdadffe8bcac)
 
+## 포스터
+![그로쓰_02_김서방_2022-05-19_포스터_방현수.pdf](https://github.com/KSB-graduation-proj/APP/files/11524209/_02_._2022-05-19_._.pdf)
+
 ## 팀원
 Coop-go app 개발 팀원
 |방현수|
