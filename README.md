@@ -31,11 +31,17 @@ main.dart
 - refundList.dart
 - viewQnaList.dart
 
+<br><b> 관리자 version과 관련한 파일 폴더 </b>
+<br> 관리자 main화면, qrscan이 가능한 전/후면 카메라 화면, 환불 영수증 및 디테일 화면, QnA List 화면 </br>
+
 
 2. login folder
 - login.dart
 - quit.dart
 - signup.dart
+
+<br><b> 로그인과 관련한 파일 폴더 </b>
+<br> 로그인, 회원 탈퇴, 회원 가입 화면 </br>
 
 3. pages folder
 - mainPage.dart
@@ -43,10 +49,16 @@ main.dart
 - point.dart
 - settingsPage.dart
 
+<br><b> 페이지와 관련한 파일 폴더 </b>
+<br> 메인 화면, 마이페이지 화면 (구매영수증 확인), 생협 포인트 화면, 세팅 화면 </br>
+
 4. bill folder
 - bill.dart
 - refundRequest.dart
 - refundRequest_insuffBal.dart
+
+<br><b> 영수증과 관련한 파일 폴더 </b>
+<br> 영수증 개별 화면, 환불 요청 화면, (e) 잔액 부족으로 인한 환불 요청 화면 </br>
 
 5. Setting folder
 - qna folder
@@ -60,16 +72,24 @@ main.dart
 - refundBill.dart
 - refundInfo.dart
 
+<br><b> 기본 세팅과 관련한 파일 폴더 </b>
+<br> QnA화면 (QnA 작성, 개별 View, List View), 결제 화면 (결제 수단 List view, 결제 수단 추가), 프로필, 환불 영수증 화면 </br>
+
 6. functions folder
 - index.js
 - order.js
 - payment.js
 - refund.js
 
-
-## 파일 설명
+<br><b> 결제 및 환불 <기능>과 관련한 함수 파일 폴더 </b>
+<br> Firebase의 Functions 기능 활용해 DB 변화 감지 시 함수 trigger </br>
+<br> 주문, 결제, 환불 기능 </br>
 
 ## 보완할 점
+1. 앱결제의 현실적인 어려움 (PG사 수반 및 사업자 등록, 개인정보 문제)으로 인해 가상의 결제 시스템 설정 </br>
+2. QR생성 시 사용자 확인을 위해 학번을 사용했으나 보안 문제 발생 위험이 크므로 학번과 hash함수 등을 결합한 새로운 qr 생성 방식 필요 </br>
+3. sns 로그인 등 간편 로그인 도입 </br>
+   
 
 ## made by
 방현수
